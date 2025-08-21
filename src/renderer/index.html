@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Taller Forzani</title>
+    <script src="node_modules/multiselect-dropdown-react/build/index.js"></script>
     <style>
         body {
             margin: 0;
@@ -1098,6 +1099,285 @@
          .calendar-maintenance-count {
              position: absolute;
              bottom: 4px;
+         
+                    /* Estilos para el formulario de mantenimiento preventivo */
+           .vehicles-checkbox-list {
+               max-height: 150px;
+               overflow-y: auto;
+               border: 1px solid #e0e0e0;
+               border-radius: 8px;
+               padding: 15px;
+               background: #f8f9fa;
+               box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+           }
+           
+           .vehicles-checkbox-list::-webkit-scrollbar {
+               width: 8px;
+           }
+           
+           .vehicles-checkbox-list::-webkit-scrollbar-track {
+               background: #f1f1f1;
+               border-radius: 4px;
+           }
+           
+           .vehicles-checkbox-list::-webkit-scrollbar-thumb {
+               background: #c1c1c1;
+               border-radius: 4px;
+           }
+           
+           .vehicles-checkbox-list::-webkit-scrollbar-thumb:hover {
+               background: #a8a8a8;
+           }
+         
+         .vehicle-checkbox-item {
+             display: flex;
+             align-items: center;
+             padding: 8px 0;
+             border-bottom: 1px solid #e0e0e0;
+             cursor: pointer;
+             transition: background-color 0.2s ease;
+         }
+         
+         .vehicle-checkbox-item:last-child {
+             border-bottom: none;
+         }
+         
+         .vehicle-checkbox-item:hover {
+             background-color: #e3f2fd;
+             border-radius: 4px;
+             padding-left: 8px;
+         }
+         
+         .vehicle-checkbox {
+             margin-right: 10px;
+             transform: scale(1.2);
+         }
+         
+         .vehicle-checkbox-label {
+             font-size: 0.9rem;
+             color: #2c3e50;
+             cursor: pointer;
+         }
+         
+                 /* Estilos para el nuevo sistema de selección múltiple simplificado */
+        .vehicles-multiselect-container {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .vehicles-multiselect {
+            width: 100%;
+        }
+        
+        .multiselect-wrapper {
+            position: relative;
+        }
+        
+        .multiselect-input-area {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            min-height: 45px;
+            padding: 8px 40px 8px 12px;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.3s ease;
+        }
+        
+        .multiselect-input-area:focus-within {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .multiselect-search {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.9rem;
+            background: transparent;
+            width: 100%;
+        }
+        
+        .multiselect-toggle-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .multiselect-toggle-btn:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .multiselect-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            max-height: 400px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .multiselect-options {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .multiselect-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .multiselect-option:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .multiselect-option:last-child {
+            border-bottom: none;
+        }
+        
+        .vehicle-checkbox {
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+        }
+        
+        .option-label {
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .multiselect-footer {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .multiselect-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .multiselect-count {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .multiselect-selected {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            min-height: 20px;
+        }
+        
+        .selected-vehicle-tag {
+            background: #3498db;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: tagAppear 0.2s ease;
+        }
+        
+        @keyframes tagAppear {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes tagDisappear {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.8); }
+        }
+        
+        .tag-remove {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+        
+        .tag-remove:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .no-results-message {
+            padding: 15px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Estilos para programación preventiva */
+         
+         .preventive-scheduling {
+             background: #e8f5e8;
+             border: 1px solid #c8e6c9;
+             border-radius: 8px;
+             padding: 15px;
+             margin: 15px 0;
+         }
+         
+         .preventive-scheduling .form-label {
+             color: #2e7d32;
+             font-weight: 600;
+             margin-bottom: 10px;
+         }
+         
+         .custom-interval-group {
+             background: #fff3cd;
+             border: 1px solid #ffeaa7;
+             border-radius: 6px;
+             padding: 10px;
+             margin-top: 10px;
+         }
              right: 4px;
          }
          
@@ -2137,6 +2417,10 @@
                                      <option value="Urgente">Urgente</option>
                                  </select>
                              </div>
+                             <div class="filter-group">
+                                 <label class="filter-label">Mecánico</label>
+                                 <input type="text" class="filter-input" id="search-maintenance-technician" placeholder="Nombre del mecánico..." onkeyup="filterMaintenance()">
+                             </div>
                          </div>
                          <div class="filters-actions">
                              <button class="btn btn-secondary" onclick="clearMaintenanceFilters()">
@@ -2350,6 +2634,7 @@
              const filterType = document.getElementById('filter-maintenance-type').value;
              const filterStatus = document.getElementById('filter-maintenance-status').value;
              const filterPriority = document.getElementById('filter-maintenance-priority').value;
+             const searchTechnician = document.getElementById('search-maintenance-technician').value.toLowerCase();
              
              filteredMaintenance = allMaintenance.filter(maintenance => {
                  // Buscar por nombre del vehículo (texto aproximado)
@@ -2363,7 +2648,10 @@
                  const matchesStatus = !filterStatus || maintenance.status === filterStatus;
                  const matchesPriority = !filterPriority || maintenance.priority === filterPriority;
                  
-                 return matchesVehicle && matchesType && matchesStatus && matchesPriority;
+                 // Filtrar por mecánico (texto aproximado)
+                 const matchesTechnician = !searchTechnician || (maintenance.technician && maintenance.technician.toLowerCase().includes(searchTechnician));
+                 
+                 return matchesVehicle && matchesType && matchesStatus && matchesPriority && matchesTechnician;
              });
              
              // Actualizar tabla
@@ -2387,6 +2675,7 @@
              document.getElementById('filter-maintenance-type').value = '';
              document.getElementById('filter-maintenance-status').value = '';
              document.getElementById('filter-maintenance-priority').value = '';
+             document.getElementById('search-maintenance-technician').value = '';
              
              filteredMaintenance = [...allMaintenance];
              
@@ -2977,22 +3266,56 @@
             openModal('🔧 Nuevo Mantenimiento');
             document.getElementById('modal-body').innerHTML = `
                 <form id="maintenance-form" onsubmit="submitMaintenance(event)">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Vehículo *</label>
-                            <select class="form-select" name="vehicle_id" required id="maintenance-vehicle-select">
-                                <option value="">Seleccionar vehículo</option>
-                            </select>
+                    <!-- Tipo de mantenimiento primero -->
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Mantenimiento *</label>
+                        <select class="form-select" name="type" required id="maintenance-type-select" onchange="handleMaintenanceTypeChange()">
+                            <option value="">Seleccionar tipo</option>
+                            <option value="Preventivo">Preventivo</option>
+                            <option value="Correctivo">Correctivo</option>
+                            <option value="Reparación">Reparación</option>
+                            <option value="Inspección">Inspección</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Selección de vehículos (múltiple para preventivos) -->
+                    <div class="form-group" id="vehicles-selection-group">
+                        <label class="form-label">Vehículos *</label>
+                        <div id="vehicles-selection-container">
+                            <!-- Se llenará dinámicamente según el tipo -->
+                        </div>
+                    </div>
+                    
+                    <!-- Fecha de Inicio -->
+                    <div class="form-group">
+                        <label class="form-label">Fecha de Inicio *</label>
+                        <input type="date" class="form-input" name="start_date" required>
+                    </div>
+                    
+                    <!-- Opciones de programación para mantenimientos preventivos -->
+                    <div class="form-group" id="preventive-scheduling" style="display: none;">
+                        <label class="form-label">Programación Preventiva</label>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Repetir cada</label>
+                                <select class="form-select" name="repeat_interval" id="repeat-interval">
+                                    <option value="">No repetir</option>
+                                    <option value="1">1 mes</option>
+                                    <option value="3">3 meses</option>
+                                    <option value="6">6 meses</option>
+                                    <option value="9">9 meses</option>
+                                    <option value="12">12 meses</option>
+                                    <option value="custom">Personalizado</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="custom-interval-group" style="display: none;">
+                                <label class="form-label">Meses personalizados</label>
+                                <input type="number" class="form-input" name="custom_interval" min="1" max="60" placeholder="Ej: 4">
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Tipo de Mantenimiento *</label>
-                            <select class="form-select" name="type" required>
-                                <option value="">Seleccionar tipo</option>
-                                <option value="Preventivo">Preventivo</option>
-                                <option value="Correctivo">Correctivo</option>
-                                <option value="Reparación">Reparación</option>
-                                <option value="Inspección">Inspección</option>
-                            </select>
+                            <label class="form-label">Cantidad de repeticiones</label>
+                            <input type="number" class="form-input" name="repeat_count" min="1" max="24" value="1" placeholder="Cuántas veces repetir">
                         </div>
                     </div>
                     
@@ -3003,28 +3326,17 @@
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Fecha de Inicio *</label>
-                            <input type="date" class="form-input" name="start_date" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Fecha de Finalización</label>
-                            <input type="date" class="form-input" name="end_date">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Técnico Responsable</label>
-                            <input type="text" class="form-input" name="technician" placeholder="Nombre del técnico">
+                            <label class="form-label">Mecánico Responsable</label>
+                            <input type="text" class="form-input" name="technician" placeholder="Nombre del mecánico">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Prioridad *</label>
                             <select class="form-select" name="priority" required>
                                 <option value="">Seleccionar prioridad</option>
                                 <option value="Baja">Baja</option>
-                                <option value="Normal">Normal</option>
+                                <option value="Media">Media</option>
                                 <option value="Alta">Alta</option>
-                                <option value="Crítica">Crítica</option>
+                                <option value="Urgente">Urgente</option>
                             </select>
                         </div>
                     </div>
@@ -3115,19 +3427,331 @@
                 const { ipcRenderer } = require('electron');
                 const vehicles = await ipcRenderer.invoke('db-get-vehicles');
                 
-                const select = document.getElementById('maintenance-vehicle-select');
-                select.innerHTML = '<option value="">Seleccionar vehículo</option>';
+                // Guardar vehículos globalmente para usar en la selección
+                window.maintenanceVehicles = vehicles;
                 
-                vehicles.forEach(vehicle => {
-                    const option = document.createElement('option');
-                    option.value = vehicle.id;
-                    option.textContent = `${vehicle.name} (${vehicle.plate || 'Sin patente'})`;
-                    select.appendChild(option);
-                });
+                // Inicializar selección de vehículos
+                handleMaintenanceTypeChange();
             } catch (error) {
                 console.error('Error cargando vehículos:', error);
             }
         }
+        
+        // Función para manejar el cambio de tipo de mantenimiento
+        function handleMaintenanceTypeChange() {
+            const typeSelect = document.getElementById('maintenance-type-select');
+            const vehiclesContainer = document.getElementById('vehicles-selection-container');
+            const preventiveScheduling = document.getElementById('preventive-scheduling');
+            const repeatInterval = document.getElementById('repeat-interval');
+            
+            if (!typeSelect.value) {
+                vehiclesContainer.innerHTML = '<p style="color: #e74c3c;">Seleccione primero el tipo de mantenimiento</p>';
+                preventiveScheduling.style.display = 'none';
+                return;
+            }
+            
+            const isPreventive = typeSelect.value === 'Preventivo';
+            
+            if (isPreventive) {
+                                // Para mantenimientos preventivos: desplegable con búsqueda y selección múltiple
+                vehiclesContainer.innerHTML = `
+                    <div class="vehicles-multiselect-container">
+                        <p style="color: #27ae60; margin-bottom: 10px; font-weight: 600;">
+                            ✅ Seleccione uno o más vehículos para mantenimiento preventivo
+                        </p>
+                        <p style="color: #7f8c8d; margin-bottom: 15px; font-size: 0.9rem;">
+                            💡 Puede seleccionar múltiples vehículos y programar repeticiones automáticas
+                        </p>
+                        
+                        <!-- Campo de entrada principal usando multiselect-dropdown-react -->
+                        <div id="vehicles-multiselect-container">
+                            <!-- Se llenará dinámicamente con el componente multiselect -->
+                        </div>
+                    </div>
+                `;
+                
+                // Inicializar el componente multiselect
+                initializeVehiclesMultiselect();
+                
+                // Mostrar opciones de programación preventiva
+                preventiveScheduling.style.display = 'block';
+                
+                // Agregar evento para intervalo personalizado
+                repeatInterval.addEventListener('change', handleRepeatIntervalChange);
+            } else {
+                // Para otros tipos: selección única con dropdown
+                vehiclesContainer.innerHTML = `
+                    <select class="form-select" name="vehicle_id" required>
+                        <option value="">Seleccionar vehículo</option>
+                        ${window.maintenanceVehicles.map(vehicle => `
+                            <option value="${vehicle.id}">${vehicle.name} (${vehicle.plate || 'Sin patente'}) - ${vehicle.type}</option>
+                        `).join('')}
+                    </select>
+                `;
+                
+                // Ocultar opciones de programación preventiva
+                preventiveScheduling.style.display = 'none';
+            }
+        }
+        
+        // Función para manejar el cambio de intervalo de repetición
+        function handleRepeatIntervalChange() {
+            const repeatInterval = document.getElementById('repeat-interval');
+            const customIntervalGroup = document.getElementById('custom-interval-group');
+            
+            if (repeatInterval.value === 'custom') {
+                customIntervalGroup.style.display = 'block';
+            } else {
+                customIntervalGroup.style.display = 'none';
+            }
+        }
+        
+        // Funciones para seleccionar/deseleccionar todos los vehículos
+        function selectAllVehicles() {
+            const checkboxes = document.querySelectorAll('input[name="vehicle_ids[]"]');
+            checkboxes.forEach(checkbox => checkbox.checked = true);
+            updateVehiclesSelection();
+        }
+        
+        function deselectAllVehicles() {
+            const checkboxes = document.querySelectorAll('input[name="vehicle_ids[]"]');
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+            updateVehiclesSelection();
+        }
+        
+        // Función para inicializar el componente multiselect de vehículos (simulando el paquete)
+        function initializeVehiclesMultiselect() {
+            const container = document.getElementById('vehicles-multiselect-container');
+            if (!container) return;
+            
+            // Limpiar el contenedor
+            container.innerHTML = '';
+            
+            // Crear el elemento del multiselect
+            const multiselectElement = document.createElement('div');
+            multiselectElement.id = 'vehicles-multiselect';
+            multiselectElement.className = 'vehicles-multiselect';
+            
+            // Preparar los datos para el multiselect
+            const options = window.maintenanceVehicles.map(vehicle => ({
+                value: vehicle.id,
+                label: `${vehicle.name} (${vehicle.plate || 'Sin patente'}) - ${vehicle.type}`
+            }));
+            
+            // Crear el HTML del multiselect (simulando el paquete multiselect-dropdown-react)
+            multiselectElement.innerHTML = `
+                <div class="multiselect-wrapper">
+                    <!-- Campo de entrada principal con búsqueda -->
+                    <div class="multiselect-input-area">
+                        <input type="text" 
+                               class="multiselect-search" 
+                               id="vehicles-search-input" 
+                               placeholder="🔍 Buscar y seleccionar vehículos..."
+                               onkeyup="filterVehiclesOptions()"
+                               onclick="toggleVehiclesDropdown()">
+                        <button type="button" 
+                                class="multiselect-toggle-btn" 
+                                onclick="toggleVehiclesDropdown()">
+                            ▼
+                        </button>
+                    </div>
+                    
+                    <!-- Dropdown con opciones -->
+                    <div class="multiselect-dropdown" id="vehicles-dropdown" style="display: none;">
+                        <div class="multiselect-options">
+                            ${options.map(option => `
+                                <label class="multiselect-option">
+                                    <input type="checkbox" 
+                                           name="vehicle_ids[]" 
+                                           value="${option.value}" 
+                                           class="vehicle-checkbox"
+                                           onchange="updateVehiclesSelection()">
+                                    <span class="option-label">${option.label}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        
+                        <!-- Footer con acciones -->
+                        <div class="multiselect-footer">
+                            <div class="multiselect-actions">
+                                <button type="button" class="btn btn-sm btn-outline" onclick="selectAllVehicles()">
+                                    ☑️ Seleccionar Todos
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline" onclick="deselectAllVehicles()">
+                                    ☐ Deseleccionar Todos
+                                </button>
+                            </div>
+                            <div class="multiselect-count" id="vehicles-selected-count">
+                                0 vehículos seleccionados
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Área de tags seleccionados -->
+                    <div class="multiselect-selected" id="vehicles-selected-tags">
+                        <!-- Los vehículos seleccionados se mostrarán aquí como tags -->
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(multiselectElement);
+            
+            // Inicializar el estado
+            updateVehiclesSelection();
+            
+            // Agregar evento para cerrar dropdown al hacer clic fuera
+            setTimeout(() => {
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.getElementById('vehicles-dropdown');
+                    const multiselect = document.querySelector('.vehicles-multiselect');
+                    
+                    if (dropdown && multiselect && !multiselect.contains(event.target)) {
+                        dropdown.style.display = 'none';
+                    }
+                });
+            }, 100);
+        }
+        
+        // Función para filtrar las opciones del multiselect
+        function filterVehiclesOptions() {
+            const searchTerm = document.getElementById('vehicles-search-input').value.toLowerCase();
+            const options = document.querySelectorAll('.multiselect-option');
+            let visibleCount = 0;
+            
+            options.forEach(option => {
+                const label = option.querySelector('.option-label').textContent.toLowerCase();
+                const matches = label.includes(searchTerm);
+                option.style.display = matches ? 'block' : 'none';
+                if (matches) visibleCount++;
+            });
+            
+            // Si no hay resultados, mostrar mensaje
+            const noResultsMsg = document.getElementById('no-results-message');
+            if (visibleCount === 0 && searchTerm.length > 0) {
+                if (!noResultsMsg) {
+                    const message = document.createElement('div');
+                    message.id = 'no-results-message';
+                    message.className = 'no-results-message';
+                    message.textContent = 'No se encontraron vehículos con ese nombre';
+                    document.querySelector('.multiselect-options').appendChild(message);
+                }
+            } else if (noResultsMsg) {
+                noResultsMsg.remove();
+            }
+        }
+        
+        // Función para mostrar/ocultar el dropdown
+        function toggleVehiclesDropdown() {
+            const dropdown = document.getElementById('vehicles-dropdown');
+            const searchInput = document.getElementById('vehicles-search-input');
+            const toggleBtn = document.querySelector('.multiselect-toggle-btn');
+            
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+                if (searchInput) {
+                    searchInput.focus();
+                }
+                if (toggleBtn) {
+                    toggleBtn.innerHTML = '▲';
+                }
+            } else {
+                dropdown.style.display = 'none';
+                if (toggleBtn) {
+                    toggleBtn.innerHTML = '▼';
+                }
+            }
+        }
+        
+        // Función para actualizar la selección de vehículos
+        function updateVehiclesSelection() {
+            const selectedCheckboxes = document.querySelectorAll('input[name="vehicle_ids[]"]:checked');
+            const selectedCount = selectedCheckboxes.length;
+            const countElement = document.getElementById('vehicles-selected-count');
+            const tagsContainer = document.getElementById('vehicles-selected-tags');
+            
+            // Actualizar contador
+            if (countElement) {
+                countElement.textContent = `${selectedCount} vehículo${selectedCount !== 1 ? 's' : ''} seleccionado${selectedCount !== 1 ? 's' : ''}`;
+            }
+            
+            // Actualizar tags visuales
+            if (tagsContainer) {
+                let tagsHTML = '';
+                selectedCheckboxes.forEach(checkbox => {
+                    const option = checkbox.closest('.multiselect-option');
+                    if (option) {
+                        const label = option.querySelector('.option-label');
+                        if (label) {
+                            const labelText = label.textContent;
+                            const value = checkbox.value;
+                            
+                            tagsHTML += `
+                                <div class="selected-vehicle-tag" data-vehicle-id="${value}">
+                                    <span class="tag-text">${labelText}</span>
+                                    <button type="button" class="tag-remove" onclick="removeVehicleTag('${value}')">×</button>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+                tagsContainer.innerHTML = tagsHTML;
+            }
+            
+            // Actualizar el campo de búsqueda para mostrar cuántos están seleccionados
+            const searchInput = document.getElementById('vehicles-search-input');
+            if (searchInput) {
+                if (selectedCount > 0) {
+                    searchInput.style.color = '#27ae60';
+                    searchInput.style.fontWeight = '500';
+                } else {
+                    searchInput.style.color = '#666';
+                    searchInput.style.fontWeight = 'normal';
+                }
+            }
+        }
+        
+        // Función para remover un tag de vehículo
+        function removeVehicleTag(vehicleId) {
+            const checkbox = document.querySelector(`input[name="vehicle_ids[]"][value="${vehicleId}"]`);
+            if (checkbox) {
+                checkbox.checked = false;
+                updateVehiclesSelection();
+                
+                // Animar la remoción del tag
+                const tag = document.querySelector(`[data-vehicle-id="${vehicleId}"]`);
+                if (tag) {
+                    tag.style.animation = 'tagDisappear 0.2s ease forwards';
+                    setTimeout(() => {
+                        if (tag.parentNode) {
+                            tag.parentNode.removeChild(tag);
+                        }
+                    }, 200);
+                }
+            }
+        }
+        
+        // Funciones para seleccionar/deseleccionar todos los vehículos
+        function selectAllVehicles() {
+            const checkboxes = document.querySelectorAll('input[name="vehicle_ids[]"]');
+            checkboxes.forEach(checkbox => checkbox.checked = true);
+            updateVehiclesSelection();
+        }
+        
+        function deselectAllVehicles() {
+            const checkboxes = document.querySelectorAll('input[name="vehicle_ids[]"]');
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+            updateVehiclesSelection();
+        }
+        
+        // Agregar evento para cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('vehicles-dropdown');
+            const container = document.querySelector('.vehicles-multiselect-container');
+            
+            if (dropdown && container && !container.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
         
         // Función para enviar formulario de vehículo
         async function submitVehicle(event) {
@@ -3164,15 +3788,105 @@
             
             try {
                 const { ipcRenderer } = require('electron');
-                const result = await ipcRenderer.invoke('db-add-maintenance', maintenanceData);
                 
-                if (result.success) {
-                    alert('✅ Mantenimiento creado exitosamente!');
-                    closeModal();
-                    refreshDashboard(); // Actualizar dashboard
+                // Verificar si es mantenimiento preventivo
+                const isPreventive = maintenanceData.type === 'Preventivo';
+                
+                if (isPreventive) {
+                    // Obtener vehículos seleccionados
+                    const selectedVehicles = Array.from(form.querySelectorAll('input[name="vehicle_ids[]"]:checked'))
+                        .map(checkbox => checkbox.value);
+                    
+                    if (selectedVehicles.length === 0) {
+                        alert('❌ Debe seleccionar al menos un vehículo para mantenimiento preventivo');
+                        return;
+                    }
+                    
+                    // Obtener datos de programación
+                    const repeatInterval = maintenanceData.repeat_interval;
+                    const repeatCount = parseInt(maintenanceData.repeat_count) || 1;
+                    const customInterval = maintenanceData.custom_interval;
+                    
+                    if (repeatInterval && repeatInterval !== '') {
+                        const intervalMonths = repeatInterval === 'custom' ? parseInt(customInterval) : parseInt(repeatInterval);
+                        
+                        if (isNaN(intervalMonths) || intervalMonths < 1) {
+                            alert('❌ Intervalo de repetición inválido');
+                            return;
+                        }
+                        
+                        // Crear múltiples mantenimientos programados
+                        const startDate = new Date(maintenanceData.start_date);
+                        let createdCount = 0;
+                        
+                        for (let i = 0; i < selectedVehicles.length; i++) {
+                            for (let j = 0; j < repeatCount; j++) {
+                                const currentDate = new Date(startDate);
+                                currentDate.setMonth(currentDate.getMonth() + (j * intervalMonths));
+                                
+                                const maintenanceForVehicle = {
+                                    ...maintenanceData,
+                                    vehicle_id: selectedVehicles[i],
+                                    start_date: currentDate.toISOString().split('T')[0],
+                                    status: 'Pendiente',
+                                    is_preventive: true,
+                                    preventive_sequence: j + 1,
+                                    total_sequences: repeatCount
+                                };
+                                
+                                // Remover campos que no van a la base de datos
+                                delete maintenanceForVehicle.vehicle_ids;
+                                delete maintenanceForVehicle.repeat_interval;
+                                delete maintenanceForVehicle.repeat_count;
+                                delete maintenanceForVehicle.custom_interval;
+                                
+                                const result = await ipcRenderer.invoke('db-add-maintenance', maintenanceForVehicle);
+                                if (result.success) {
+                                    createdCount++;
+                                }
+                            }
+                        }
+                        
+                        alert(`✅ Se crearon ${createdCount} mantenimientos preventivos programados exitosamente!`);
+                    } else {
+                        // Crear mantenimientos preventivos sin repetición
+                        let createdCount = 0;
+                        
+                        for (const vehicleId of selectedVehicles) {
+                            const maintenanceForVehicle = {
+                                ...maintenanceData,
+                                vehicle_id: vehicleId,
+                                status: 'Pendiente',
+                                is_preventive: true
+                            };
+                            
+                            delete maintenanceForVehicle.vehicle_ids;
+                            delete maintenanceForVehicle.repeat_interval;
+                            delete maintenanceForVehicle.repeat_count;
+                            delete maintenanceForVehicle.custom_interval;
+                            
+                            const result = await ipcRenderer.invoke('db-add-maintenance', maintenanceForVehicle);
+                            if (result.success) {
+                                createdCount++;
+                            }
+                        }
+                        
+                        alert(`✅ Se crearon ${createdCount} mantenimientos preventivos exitosamente!`);
+                    }
                 } else {
-                    alert('❌ Error al crear el mantenimiento');
+                    // Mantenimiento normal (no preventivo)
+                    const result = await ipcRenderer.invoke('db-add-maintenance', maintenanceData);
+                    
+                    if (result.success) {
+                        alert('✅ Mantenimiento creado exitosamente!');
+                    } else {
+                        alert('❌ Error al crear el mantenimiento');
+                    }
                 }
+                
+                closeModal();
+                showMaintenancePage(); // Recargar página de mantenimientos
+                
             } catch (error) {
                 console.error('Error creando mantenimiento:', error);
                 alert('❌ Error: ' + error.message);
