@@ -5,23 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Taller Forzani</title>
     <style>
-        * {
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            overflow: hidden;
+            background-color: #f5f5f5;
         }
         
         #root {
             height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
         
         .loading {
@@ -29,14 +21,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: white;
             font-size: 18px;
+            color: #666;
         }
         
         .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
             border-radius: 50%;
-            border-top: 4px solid white;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
@@ -47,17 +39,3233 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Estilos de la aplicación */
+        .app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #666;
+            text-decoration: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-link:hover {
+            background-color: #f8f9fa;
+            color: #333;
+            border-left-color: #3498db;
+        }
+
+        .nav-link.active {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border-left-color: #1976d2;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #229954;
+        }
+        
+        .btn-warning {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        /* Estilos del Dashboard */
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stat-card.primary { border-left-color: #3498db; }
+        .stat-card.warning { border-left-color: #f39c12; }
+        .stat-card.danger { border-left-color: #e74c3c; }
+        .stat-card.success { border-left-color: #27ae60; }
+        
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .stat-icon {
+            font-size: 3rem;
+            opacity: 0.8;
+        }
+        
+        .stat-content h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-change {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .stat-change.positive { color: #27ae60; }
+        .stat-change.negative { color: #e74c3c; }
+        .stat-change.neutral { color: #7f8c8d; }
+        
+        .dashboard-charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chart-container h3 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        /* Gráfico de estado de vehículos */
+        .status-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .status-label {
+            min-width: 120px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .status-bar-container {
+            flex: 1;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .status-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .status-count {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* Gráfico de mantenimientos mensuales */
+        .monthly-chart {
+            display: flex;
+            align-items: end;
+            gap: 8px;
+            height: 200px;
+            padding: 20px 0;
+        }
+        
+        .month-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .bar {
+            width: 100%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            transition: height 0.5s ease;
+        }
+        
+        .month-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        
+        .month-count {
+            font-size: 0.8rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        /* Actividad reciente */
+        .recent-activity {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .recent-activity h3 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .activity-item.high-priority {
+            border-left-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .activity-icon {
+            font-size: 1.5rem;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .activity-date {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        /* Acciones rápidas */
+        .quick-actions {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .quick-actions h3 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+        }
+        
+        /* Mensajes de error */
+        .error-message {
+            background: #fdf2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            color: #991b1b;
+        }
+        
+        .error-message h2 {
+            margin: 0 0 15px 0;
+            color: #dc2626;
+        }
+        
+        .dashboard-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            text-align: center;
+        }
+        
+        /* Estilos para modales */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 25px 30px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #95a5a6;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background-color: #f8f9fa;
+            color: #e74c3c;
+        }
+        
+        .modal-body {
+            padding: 20px 30px 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .btn-cancel {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .status-active { background-color: #d4edda; color: #155724; }
+        .status-maintenance { background-color: #fff3cd; color: #856404; }
+        .status-repair { background-color: #f8d7da; color: #721c24; }
+        .status-inactive { background-color: #e2e3e5; color: #383d41; }
+        .status-fuera-de-servicio { background-color: #e2e3e5; color: #383d41; }
+        
+        /* Badges para tipos de vehículos */
+        .status-tractor { background-color: #d1ecf1; color: #0c5460; }
+        .status-cosechadora { background-color: #f8d7da; color: #721c24; }
+        .status-pulverizadora { background-color: #fff3cd; color: #856404; }
+        .status-sembradora { background-color: #d4edda; color: #155724; }
+        .status-otro { background-color: #e2e3e5; color: #383d41; }
+        
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .priority-low { background-color: #d1ecf1; color: #0c5460; }
+        .priority-normal { background-color: #d4edda; color: #155724; }
+        .priority-high { background-color: #f8d7da; color: #721c24; }
+        
+        .stock-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .stock-ok { background-color: #d4edda; color: #155724; }
+        .stock-low { background-color: #f8d7da; color: #721c24; }
+        .stock-critical { background-color: #f8d7da; color: #721c24; }
+        
+        /* Estilos para la página de Vehículos */
+        .vehicles-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .vehicles-title {
+            margin: 0;
+        }
+        
+        .vehicles-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-filters {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .filters-title {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+        
+        .filter-input {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .filter-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .filters-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .vehicles-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .vehicles-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .vehicles-table th {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .vehicles-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: middle;
+        }
+        
+        .vehicles-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .vehicle-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .vehicle-details {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .vehicle-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 25px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            color: #2c3e50;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination button:hover:not(:disabled) {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination .current-page {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .vehicles-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            text-align: center;
+        }
+        
+        .no-vehicles {
+            text-align: center;
+            padding: 50px;
+            color: #7f8c8d;
+        }
+        
+        .no-vehicles h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+        }
+        
+        .no-vehicles p {
+            margin: 0 0 20px 0;
+            font-size: 1.1rem;
+        }
+        
+        /* Estilos para la página de Mantenimientos */
+        .maintenance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .maintenance-title {
+            margin: 0;
+        }
+        
+        .maintenance-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .maintenance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .maintenance-stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-left: 4px solid;
+        }
+        
+        .maintenance-stat-card.pending {
+            border-left-color: #f39c12;
+        }
+        
+        .maintenance-stat-card.in-progress {
+            border-left-color: #3498db;
+        }
+        
+        .maintenance-stat-card.completed {
+            border-left-color: #27ae60;
+        }
+        
+        .maintenance-stat-card.overdue {
+            border-left-color: #e74c3c;
+        }
+        
+        .maintenance-stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .maintenance-stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .maintenance-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .maintenance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .maintenance-table th {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e0e0e0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .maintenance-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: middle;
+        }
+        
+        .maintenance-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .maintenance-vehicle {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .maintenance-details {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .maintenance-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .maintenance-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            text-align: center;
+        }
+        
+        .no-maintenance {
+            text-align: center;
+            padding: 50px;
+            color: #7f8c8d;
+        }
+        
+        .no-maintenance h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+        }
+        
+        .no-maintenance p {
+            margin: 0 0 20px 0;
+            font-size: 1.1rem;
+        }
+        
+        .maintenance-cost {
+            font-weight: 600;
+            color: #27ae60;
+        }
+        
+        .maintenance-priority {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .priority-low {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .priority-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .priority-high {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .priority-urgent {
+            background-color: #f5c6cb;
+            color: #721c24;
+            animation: pulse 2s infinite;
+        }
+        
+                 @keyframes pulse {
+             0% { opacity: 1; }
+             50% { opacity: 0.7; }
+             100% { opacity: 1; }
+         }
+         
+         /* Estilos para el calendario de mantenimientos */
+         .maintenance-calendar {
+             background: white;
+             border-radius: 8px;
+             overflow: hidden;
+             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+         }
+         
+         .calendar-header {
+             display: grid;
+             grid-template-columns: repeat(7, 1fr);
+             background: #f8f9fa;
+             border-bottom: 1px solid #e0e0e0;
+         }
+         
+         .calendar-day-header {
+             padding: 12px 8px;
+             text-align: center;
+             font-weight: 600;
+             color: #2c3e50;
+             font-size: 0.85rem;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+         
+         .calendar-grid {
+             display: flex;
+             flex-direction: column;
+         }
+         
+         .calendar-week {
+             display: grid;
+             grid-template-columns: repeat(7, 1fr);
+             border-bottom: 1px solid #f0f0f0;
+         }
+         
+         .calendar-week:last-child {
+             border-bottom: none;
+         }
+         
+         .calendar-day {
+             padding: 8px;
+             min-height: 60px;
+             border-right: 1px solid #f0f0f0;
+             position: relative;
+             background: white;
+             transition: background-color 0.2s ease;
+         }
+         
+         .calendar-day:last-child {
+             border-right: none;
+         }
+         
+         .calendar-day:hover {
+             background-color: #f8f9fa;
+         }
+         
+         .calendar-day.other-month {
+             background-color: #f8f9fa;
+             color: #bdc3c7;
+         }
+         
+         .calendar-day.today {
+             background-color: #e3f2fd;
+             border: 2px solid #2196f3;
+         }
+         
+         .calendar-day-number {
+             font-size: 0.9rem;
+             font-weight: 600;
+             color: #2c3e50;
+             margin-bottom: 4px;
+         }
+         
+         .calendar-maintenance-count {
+             position: absolute;
+             bottom: 4px;
+             right: 4px;
+         }
+         
+         .calendar-maintenance-count .maintenance-priority {
+             font-size: 0.7rem;
+             padding: 2px 6px;
+             border-radius: 10px;
+             font-weight: 600;
+         }
+    </style>
     </style>
 </head>
 <body>
     <div id="root">
         <div class="loading">
             <div class="spinner"></div>
-            <span>Cargando Sistema Taller Forzani...</span>
+            Cargando Sistema Taller Forzani...
         </div>
     </div>
     
-    <link rel="stylesheet" href="./styles/App.css">
-    <script src="./renderer.js"></script>
+    <script>
+        console.log('=== INICIANDO APLICACIÓN DIRECTA ===');
+        
+        // Función para ocultar loading y mostrar aplicación
+        function showApp() {
+            console.log('Mostrando aplicación...');
+            
+            const root = document.getElementById('root');
+            if (!root) {
+                console.error('No se encontró root');
+                return;
+            }
+            
+            // Crear HTML de la aplicación directamente
+            root.innerHTML = `
+                <div class="app">
+                    <!-- Header -->
+                    <header class="header">
+                        <div class="header-content">
+                            <h1 class="app-title">
+                                <span style="margin-right: 10px;">🏭</span>
+                                Sistema Taller Forzani
+                            </h1>
+                            <button class="btn btn-primary" onclick="showInfo()">
+                                ℹ️ Info
+                            </button>
+                        </div>
+                    </header>
+                    
+                    <!-- Main Container -->
+                    <div class="main-container">
+                        <!-- Sidebar -->
+                        <nav class="sidebar">
+                            <ul class="nav-menu">
+                                <li>
+                                    <button class="nav-link active" onclick="showPage('dashboard')">
+                                        <span class="nav-icon">📊</span>
+                                        <span>Dashboard</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-link" onclick="showPage('vehicles')">
+                                        <span class="nav-icon">🚗</span>
+                                        <span>Vehículos</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-link" onclick="showPage('maintenance')">
+                                        <span class="nav-icon">🔧</span>
+                                        <span>Mantenimiento</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-link" onclick="showPage('parts')">
+                                        <span class="nav-icon">⚙️</span>
+                                        <span>Repuestos</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="nav-link" onclick="showPage('reports')">
+                                        <span class="nav-icon">📋</span>
+                                        <span>Reportes</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                        
+                        <!-- Content -->
+                        <main class="content" id="page-content">
+                            <h1 class="page-title">Dashboard</h1>
+                            <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                                <h2 style="color: #27ae60; margin-bottom: 20px;">✅ ¡Aplicación funcionando correctamente!</h2>
+                                <p style="color: #666; font-size: 1.1rem; margin-bottom: 20px;">
+                                    El sistema de gestión de taller está operativo. Puedes navegar entre las diferentes secciones usando el menú lateral.
+                                </p>
+                                <div style="background: #e8f4fd; padding: 20px; border-radius: 8px; border-left: 4px solid #3498db;">
+                                    <h3 style="color: #2c3e50; margin-bottom: 15px;">Funcionalidades disponibles:</h3>
+                                    <ul style="color: #666;">
+                                        <li>📊 Dashboard con estadísticas</li>
+                                        <li>🚗 Gestión de vehículos</li>
+                                        <li>🔧 Control de mantenimientos</li>
+                                        <li>⚙️ Inventario de repuestos</li>
+                                        <li>📋 Reportes y análisis</li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary" onclick="testDatabase()" style="margin-top: 20px;">
+                                    🔗 Probar Base de Datos
+                                </button>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            `;
+            
+            console.log('✅ Aplicación mostrada correctamente');
+        }
+        
+        // Funciones para la navegación
+        function showPage(page) {
+            console.log('Navegando a:', page);
+            
+            // Actualizar navegación activa
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.closest('.nav-link').classList.add('active');
+            
+            // Actualizar contenido
+            const content = document.getElementById('page-content');
+            const pageNames = {
+                dashboard: 'Dashboard',
+                vehicles: 'Vehículos',
+                maintenance: 'Mantenimiento',
+                parts: 'Repuestos',
+                reports: 'Reportes'
+            };
+            
+            if (page === 'dashboard') {
+                showDashboard();
+            } else if (page === 'vehicles') {
+                showVehiclesPage();
+            } else if (page === 'maintenance') {
+                showMaintenancePage();
+            } else {
+                content.innerHTML = `
+                    <h1 class="page-title">${pageNames[page]}</h1>
+                    <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <h2 style="color: #3498db;">Página: ${pageNames[page]}</h2>
+                        <p style="color: #666; font-size: 1.1rem;">
+                            Esta sección está funcionando correctamente. 
+                            Aquí se implementarán las funcionalidades específicas de ${pageNames[page].toLowerCase()}.
+                        </p>
+                        <button class="btn btn-primary" onclick="alert('Funcionalidad en desarrollo')">
+                            ➕ Nueva Acción
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Función para mostrar el Dashboard completo
+        async function showDashboard() {
+            const content = document.getElementById('page-content');
+            
+            // Mostrar loading
+            content.innerHTML = `
+                <div class="dashboard-loading">
+                    <div class="spinner"></div>
+                    <p>Cargando estadísticas del taller...</p>
+                </div>
+            `;
+            
+            try {
+                // Obtener datos de la base de datos
+                const { ipcRenderer } = require('electron');
+                const [stats, vehicles, maintenance, parts] = await Promise.all([
+                    ipcRenderer.invoke('db-get-dashboard-stats'),
+                    ipcRenderer.invoke('db-get-vehicles'),
+                    ipcRenderer.invoke('db-get-maintenance'),
+                    ipcRenderer.invoke('db-get-parts')
+                ]);
+                
+                // Calcular estadísticas adicionales
+                const totalCost = maintenance.reduce((sum, m) => sum + (m.cost || 0), 0);
+                const activeMaintenance = maintenance.filter(m => m.status === 'En Proceso').length;
+                const completedMaintenance = maintenance.filter(m => m.status === 'Completado').length;
+                const lowStockParts = parts.filter(p => p.stock <= p.min_stock).length;
+                
+                // Renderizar dashboard
+                content.innerHTML = `
+                    <div class="dashboard-header">
+                        <h1 class="page-title">Dashboard del Taller</h1>
+                        <p class="page-subtitle">Resumen general de operaciones y estado del taller</p>
+                    </div>
+                    
+                    <!-- Tarjetas de estadísticas principales -->
+                    <div class="stats-grid">
+                        <div class="stat-card primary">
+                            <div class="stat-icon">🚗</div>
+                            <div class="stat-content">
+                                <h3>Total Vehículos</h3>
+                                <div class="stat-number">${stats.totalVehicles || vehicles.length}</div>
+                                <div class="stat-change positive">+${Math.floor(Math.random() * 3) + 1} este mes</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card warning">
+                            <div class="stat-icon">🔧</div>
+                            <div class="stat-content">
+                                <h3>Mantenimientos Activos</h3>
+                                <div class="stat-number">${activeMaintenance}</div>
+                                <div class="stat-change neutral">${completedMaintenance} completados</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card danger">
+                            <div class="stat-icon">⚙️</div>
+                            <div class="stat-content">
+                                <h3>Stock Bajo</h3>
+                                <div class="stat-number">${lowStockParts}</div>
+                                <div class="stat-change negative">Requiere atención</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card success">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-content">
+                                <h3>Costos Mensuales</h3>
+                                <div class="stat-number">$${formatCurrency(totalCost)}</div>
+                                <div class="stat-change positive">-${Math.floor(Math.random() * 15) + 5}% vs mes anterior</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gráficos y análisis -->
+                    <div class="dashboard-charts">
+                        <div class="chart-container">
+                            <h3>Estado de Vehículos</h3>
+                            <div class="vehicle-status-chart">
+                                ${generateVehicleStatusChart(vehicles)}
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>Mantenimientos por Mes</h3>
+                            <div class="maintenance-chart">
+                                ${generateMaintenanceChart(maintenance)}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actividad reciente -->
+                    <div class="recent-activity">
+                        <h3>Actividad Reciente</h3>
+                        <div class="activity-list">
+                            ${generateRecentActivity(vehicles, maintenance, parts)}
+                        </div>
+                    </div>
+                    
+                    <!-- Acciones rápidas -->
+                    <div class="quick-actions">
+                        <h3>Acciones Rápidas</h3>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="openNewVehicleModal()">
+                                ➕ Nuevo Vehículo
+                            </button>
+                            <button class="btn btn-warning" onclick="openNewMaintenanceModal()">
+                                🔧 Nuevo Mantenimiento
+                            </button>
+                            <button class="btn btn-success" onclick="openNewPartModal()">
+                                ⚙️ Nuevo Repuesto
+                            </button>
+                            <button class="btn btn-info" onclick="refreshDashboard()">
+                                🔄 Actualizar Datos
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                console.log('✅ Dashboard cargado correctamente');
+                
+            } catch (error) {
+                console.error('Error cargando dashboard:', error);
+                content.innerHTML = `
+                    <div class="error-message">
+                        <h2>❌ Error al cargar el dashboard</h2>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="showDashboard()">
+                            🔄 Reintentar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Función para generar gráfico de estado de vehículos
+        function generateVehicleStatusChart(vehicles) {
+            const statusCount = {};
+            vehicles.forEach(v => {
+                statusCount[v.status] = (statusCount[v.status] || 0) + 1;
+            });
+            
+            const total = vehicles.length;
+            let chartHTML = '<div class="status-bars">';
+            
+            Object.entries(statusCount).forEach(([status, count]) => {
+                const percentage = total > 0 ? (count / total) * 100 : 0;
+                const color = getStatusColor(status);
+                chartHTML += `
+                    <div class="status-bar">
+                        <div class="status-label">${status}</div>
+                        <div class="status-bar-container">
+                            <div class="status-bar-fill" style="width: ${percentage}%; background-color: ${color};"></div>
+                        </div>
+                        <div class="status-count">${count}</div>
+                    </div>
+                `;
+            });
+            
+            chartHTML += '</div>';
+            return chartHTML;
+        }
+        
+        // Función para generar gráfico de mantenimientos
+        function generateMaintenanceChart(maintenance) {
+            const monthlyData = {};
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            
+            maintenance.forEach(m => {
+                const month = new Date(m.start_date).getMonth();
+                monthlyData[month] = (monthlyData[month] || 0) + 1;
+            });
+            
+            let chartHTML = '<div class="monthly-chart">';
+            months.forEach((month, index) => {
+                const count = monthlyData[index] || 0;
+                const height = count > 0 ? Math.max(20, count * 15) : 20;
+                chartHTML += `
+                    <div class="month-bar">
+                        <div class="bar" style="height: ${height}px;"></div>
+                        <div class="month-label">${month}</div>
+                        <div class="month-count">${count}</div>
+                    </div>
+                `;
+            });
+            chartHTML += '</div>';
+            return chartHTML;
+        }
+        
+        // Función para generar actividad reciente
+        function generateRecentActivity(vehicles, maintenance, parts) {
+            const activities = [];
+            
+            // Agregar actividades de vehículos
+            vehicles.forEach(v => {
+                if (v.last_maintenance) {
+                    activities.push({
+                        type: 'vehicle',
+                        icon: '🚗',
+                        text: `Mantenimiento realizado en ${v.name}`,
+                        date: v.last_maintenance,
+                        priority: 'normal'
+                    });
+                }
+            });
+            
+            // Agregar actividades de mantenimiento
+            maintenance.forEach(m => {
+                activities.push({
+                    type: 'maintenance',
+                    icon: '🔧',
+                    text: `${m.type}: ${m.description}`,
+                    date: m.start_date,
+                    priority: m.priority === 'Alta' ? 'high' : 'normal'
+                });
+            });
+            
+            // Agregar actividades de repuestos
+            parts.forEach(p => {
+                if (p.stock <= p.min_stock) {
+                    activities.push({
+                        type: 'part',
+                        icon: '⚙️',
+                        text: `Stock bajo: ${p.name} (${p.stock}/${p.min_stock})`,
+                        date: new Date().toISOString().split('T')[0],
+                        priority: 'high'
+                    });
+                }
+            });
+            
+            // Ordenar por fecha y tomar los últimos 10
+            activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+            const recentActivities = activities.slice(0, 10);
+            
+            let activitiesHTML = '';
+            recentActivities.forEach(activity => {
+                const priorityClass = activity.priority === 'high' ? 'high-priority' : '';
+                activitiesHTML += `
+                    <div class="activity-item ${priorityClass}">
+                        <div class="activity-icon">${activity.icon}</div>
+                        <div class="activity-content">
+                            <div class="activity-text">${activity.text}</div>
+                            <div class="activity-date">${formatDate(activity.date)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return activitiesHTML;
+        }
+        
+        // Función para refrescar el dashboard
+        function refreshDashboard() {
+            showDashboard();
+        }
+        
+        // Función para mostrar la página de Vehículos
+        async function showVehiclesPage() {
+            const content = document.getElementById('page-content');
+            
+            // Mostrar loading
+            content.innerHTML = `
+                <div class="vehicles-loading">
+                    <div class="spinner"></div>
+                    <p>Cargando vehículos...</p>
+                </div>
+            `;
+            
+            try {
+                // Obtener vehículos de la base de datos
+                const { ipcRenderer } = require('electron');
+                const vehicles = await ipcRenderer.invoke('db-get-vehicles');
+                
+                // Inicializar variables globales
+                allVehicles = vehicles;
+                filteredVehicles = [...vehicles];
+                currentPage = 1;
+                
+                // Renderizar página de vehículos
+                content.innerHTML = `
+                    <div class="vehicles-header">
+                        <h1 class="page-title vehicles-title">🚗 Gestión de Vehículos</h1>
+                        <div class="vehicles-actions">
+                            <button class="btn btn-primary" onclick="openNewVehicleModal()">
+                                ➕ Nuevo Vehículo
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportVehicles()">
+                                📥 Exportar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtros y búsqueda -->
+                    <div class="search-filters">
+                        <h3 class="filters-title">🔍 Filtros y Búsqueda</h3>
+                        <div class="filters-grid">
+                            <div class="filter-group">
+                                <label class="filter-label">Buscar por nombre</label>
+                                <input type="text" class="filter-input" id="search-name" placeholder="Nombre del vehículo..." onkeyup="filterVehicles()">
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Tipo</label>
+                                <select class="filter-input" id="filter-type" onchange="filterVehicles()">
+                                    <option value="">Todos los tipos</option>
+                                    <option value="Tractor">Tractor</option>
+                                    <option value="Cosechadora">Cosechadora</option>
+                                    <option value="Pulverizadora">Pulverizadora</option>
+                                    <option value="Sembradora">Sembradora</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Estado</label>
+                                <select class="filter-input" id="filter-status" onchange="filterVehicles()">
+                                    <option value="">Todos los estados</option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Mantenimiento">Mantenimiento</option>
+                                    <option value="Reparación">Reparación</option>
+                                    <option value="Fuera de Servicio">Fuera de Servicio</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-label">Marca</label>
+                                <input type="text" class="filter-input" id="filter-brand" placeholder="Marca..." onkeyup="filterVehicles()">
+                            </div>
+                        </div>
+                        <div class="filters-actions">
+                            <button class="btn btn-secondary" onclick="clearFilters()">
+                                🗑️ Limpiar Filtros
+                            </button>
+                            <span id="vehicles-count" style="color: #7f8c8d; font-weight: 500;"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabla de vehículos -->
+                    <div class="vehicles-table-container">
+                        <table class="vehicles-table" id="vehicles-table">
+                            <thead>
+                                <tr>
+                                    <th>Vehículo</th>
+                                    <th>Tipo</th>
+                                    <th>Marca/Modelo</th>
+                                    <th>Año</th>
+                                    <th>Patente</th>
+                                    <th>Estado</th>
+                                    <th>Último Mantenimiento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vehicles-tbody">
+                                ${generateVehiclesTableRows(vehicles)}
+                            </tbody>
+                        </table>
+                        
+                        <!-- Paginación -->
+                        <div class="pagination" id="vehicles-pagination">
+                            ${generatePagination(vehicles.length)}
+                        </div>
+                    </div>
+                `;
+                
+                // Actualizar contador
+                updateVehiclesCount(vehicles.length);
+                
+                console.log('✅ Página de vehículos cargada correctamente');
+                
+            } catch (error) {
+                console.error('Error cargando página de vehículos:', error);
+                content.innerHTML = `
+                    <div class="error-message">
+                        <h2>❌ Error al cargar los vehículos</h2>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="showVehiclesPage()">
+                            🔄 Reintentar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Función para generar filas de la tabla de vehículos
+        function generateVehiclesTableRows(vehicles) {
+            if (!vehicles || vehicles.length === 0) {
+                return `
+                    <tr>
+                        <td colspan="8">
+                            <div class="no-vehicles">
+                                <h3>🚗 No hay vehículos registrados</h3>
+                                <p>Comienza agregando tu primer vehículo al taller</p>
+                                <button class="btn btn-primary" onclick="openNewVehicleModal()">
+                                    ➕ Agregar Primer Vehículo
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            return vehicles.map(vehicle => `
+                <tr data-vehicle-id="${vehicle.id}">
+                    <td>
+                        <div class="vehicle-name">${vehicle.name}</div>
+                        <div class="vehicle-details">ID: ${vehicle.id}</div>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${vehicle.type.toLowerCase().replace(' ', '-')}">
+                            ${vehicle.type}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="vehicle-name">${vehicle.brand}</div>
+                        <div class="vehicle-details">${vehicle.model}</div>
+                    </td>
+                    <td>${vehicle.year}</td>
+                    <td>${vehicle.plate || 'Sin patente'}</td>
+                    <td>
+                        <span class="status-badge status-${vehicle.status.toLowerCase().replace(' ', '-')}">
+                            ${vehicle.status}
+                        </span>
+                    </td>
+                    <td>${vehicle.last_maintenance ? formatDate(vehicle.last_maintenance) : 'Nunca'}</td>
+                    <td>
+                        <div class="vehicle-actions">
+                            <button class="btn btn-primary btn-sm" onclick="viewVehicleDetails(${vehicle.id})">
+                                👁️ Ver
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="editVehicle(${vehicle.id})">
+                                ✏️ Editar
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteVehicle(${vehicle.id})">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Función para generar paginación
+        function generatePagination(totalItems) {
+            const itemsPerPage = 10;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            if (totalPages <= 1) return '';
+            
+            let paginationHTML = '';
+            
+            // Botón anterior
+            paginationHTML += `
+                <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>
+                    ⏮️ Primera
+                </button>
+                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    ◀️ Anterior
+                </button>
+            `;
+            
+            // Números de página
+            for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                paginationHTML += `
+                    <button onclick="changePage(${i})" class="${i === currentPage ? 'current-page' : ''}">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            // Botón siguiente
+            paginationHTML += `
+                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    Siguiente ▶️
+                </button>
+                <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    Última ⏭️
+                </button>
+            `;
+            
+            return paginationHTML;
+        }
+        
+        // Variables globales para la página de vehículos
+        let currentPage = 1;
+        let allVehicles = [];
+        let filteredVehicles = [];
+        
+        // Función para filtrar vehículos
+        function filterVehicles() {
+            const searchName = document.getElementById('search-name').value.toLowerCase();
+            const filterType = document.getElementById('filter-type').value;
+            const filterStatus = document.getElementById('filter-status').value;
+            const filterBrand = document.getElementById('filter-brand').value.toLowerCase();
+            
+            filteredVehicles = allVehicles.filter(vehicle => {
+                const matchesName = vehicle.name.toLowerCase().includes(searchName);
+                const matchesType = !filterType || vehicle.type === filterType;
+                const matchesStatus = !filterStatus || vehicle.status === filterStatus;
+                const matchesBrand = !filterBrand || vehicle.brand.toLowerCase().includes(filterBrand);
+                
+                return matchesName && matchesType && matchesStatus && matchesBrand;
+            });
+            
+            // Actualizar tabla
+            const tbody = document.getElementById('vehicles-tbody');
+            tbody.innerHTML = generateVehiclesTableRows(filteredVehicles);
+            
+            // Actualizar contador
+            updateVehiclesCount(filteredVehicles.length);
+            
+            // Actualizar paginación
+            currentPage = 1;
+            const pagination = document.getElementById('vehicles-pagination');
+            if (pagination) {
+                pagination.innerHTML = generatePagination(filteredVehicles.length);
+            }
+        }
+        
+        // Función para limpiar filtros
+        function clearFilters() {
+            document.getElementById('search-name').value = '';
+            document.getElementById('filter-type').value = '';
+            document.getElementById('filter-status').value = '';
+            document.getElementById('filter-brand').value = '';
+            
+            filteredVehicles = [...allVehicles];
+            
+            // Actualizar tabla
+            const tbody = document.getElementById('vehicles-tbody');
+            tbody.innerHTML = generateVehiclesTableRows(filteredVehicles);
+            
+            // Actualizar contador
+            updateVehiclesCount(filteredVehicles.length);
+            
+            // Actualizar paginación
+            currentPage = 1;
+            const pagination = document.getElementById('vehicles-pagination');
+            if (pagination) {
+                pagination.innerHTML = generatePagination(filteredVehicles.length);
+            }
+        }
+        
+        // Función para actualizar contador de vehículos
+        function updateVehiclesCount(count) {
+            const countElement = document.getElementById('vehicles-count');
+            if (countElement) {
+                countElement.textContent = `${count} vehículo${count !== 1 ? 's' : ''} encontrado${count !== 1 ? 's' : ''}`;
+            }
+        }
+        
+        // Función para cambiar página
+        function changePage(page) {
+            currentPage = page;
+            // Aquí implementarías la lógica de paginación
+            // Por ahora solo actualizamos la paginación
+            const pagination = document.getElementById('vehicles-pagination');
+            pagination.innerHTML = generatePagination(filteredVehicles.length);
+        }
+        
+        // Función para ver detalles del vehículo
+        function viewVehicleDetails(vehicleId) {
+            const vehicle = allVehicles.find(v => v.id === vehicleId);
+            if (!vehicle) return;
+            
+            openModal(`🚗 ${vehicle.name}`);
+            document.getElementById('modal-body').innerHTML = `
+                <div style="padding: 20px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 20px;">Información del Vehículo</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div>
+                            <strong>Nombre:</strong> ${vehicle.name}
+                        </div>
+                        <div>
+                            <strong>Tipo:</strong> ${vehicle.type}
+                        </div>
+                        <div>
+                            <strong>Marca:</strong> ${vehicle.brand}
+                        </div>
+                        <div>
+                            <strong>Modelo:</strong> ${vehicle.model}
+                        </div>
+                        <div>
+                            <strong>Año:</strong> ${vehicle.year}
+                        </div>
+                        <div>
+                            <strong>Patente:</strong> ${vehicle.plate || 'Sin patente'}
+                        </div>
+                        <div>
+                            <strong>Estado:</strong> 
+                            <span class="status-badge status-${vehicle.status.toLowerCase().replace(' ', '-')}">
+                                ${vehicle.status}
+                            </span>
+                        </div>
+                        <div>
+                            <strong>Último Mantenimiento:</strong> ${vehicle.last_maintenance ? formatDate(vehicle.last_maintenance) : 'Nunca'}
+                        </div>
+                    </div>
+                    
+                    ${vehicle.observations ? `
+                        <div style="margin-bottom: 20px;">
+                            <strong>Observaciones:</strong>
+                            <p style="margin-top: 5px; color: #666;">${vehicle.observations}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="btn btn-warning" onclick="editVehicle(${vehicle.id})">
+                            ✏️ Editar Vehículo
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Función para editar vehículo
+        function editVehicle(vehicleId) {
+            const vehicle = allVehicles.find(v => v.id === vehicleId);
+            if (!vehicle) return;
+            
+            openModal(`✏️ Editar Vehículo: ${vehicle.name}`);
+            document.getElementById('modal-body').innerHTML = `
+                <form id="edit-vehicle-form" onsubmit="submitEditVehicle(event, ${vehicle.id})">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Vehículo *</label>
+                            <input type="text" class="form-input" name="name" required value="${vehicle.name}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipo *</label>
+                            <select class="form-select" name="type" required>
+                                <option value="Tractor" ${vehicle.type === 'Tractor' ? 'selected' : ''}>Tractor</option>
+                                <option value="Cosechadora" ${vehicle.type === 'Cosechadora' ? 'selected' : ''}>Cosechadora</option>
+                                <option value="Pulverizadora" ${vehicle.type === 'Pulverizadora' ? 'selected' : ''}>Pulverizadora</option>
+                                <option value="Sembradora" ${vehicle.type === 'Sembradora' ? 'selected' : ''}>Sembradora</option>
+                                <option value="Otro" ${vehicle.type === 'Otro' ? 'selected' : ''}>Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Marca *</label>
+                            <input type="text" class="form-input" name="brand" required value="${vehicle.brand}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Modelo *</label>
+                            <input type="text" class="form-input" name="model" required value="${vehicle.model}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Año *</label>
+                            <input type="number" class="form-input" name="year" required min="1900" max="2030" value="${vehicle.year}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Patente/Matrícula</label>
+                            <input type="text" class="form-input" name="plate" value="${vehicle.plate || ''}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Estado *</label>
+                        <select class="form-select" name="status" required>
+                            <option value="Activo" ${vehicle.status === 'Activo' ? 'selected' : ''}>Activo</option>
+                            <option value="Mantenimiento" ${vehicle.status === 'Mantenimiento' ? 'selected' : ''}>Mantenimiento</option>
+                            <option value="Reparación" ${vehicle.status === 'Reparación' ? 'selected' : ''}>Reparación</option>
+                            <option value="Fuera de Servicio" ${vehicle.status === 'Fuera de Servicio' ? 'selected' : ''}>Fuera de Servicio</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Observaciones</label>
+                        <textarea class="form-textarea" name="observations">${vehicle.observations || ''}</textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Actualizar Vehículo</button>
+                    </div>
+                </form>
+            `;
+        }
+        
+        // Función para eliminar vehículo
+        async function deleteVehicle(vehicleId) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este vehículo? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            
+            try {
+                const { ipcRenderer } = require('electron');
+                const result = await ipcRenderer.invoke('db-delete-vehicle', vehicleId);
+                
+                if (result.success) {
+                    alert('✅ Vehículo eliminado exitosamente!');
+                    // Recargar la página de vehículos
+                    showVehiclesPage();
+                } else {
+                    alert('❌ Error al eliminar el vehículo: ' + (result.message || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error eliminando vehículo:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        // Función para exportar vehículos
+        function exportVehicles() {
+            try {
+                // Crear contenido CSV
+                let csvContent = 'Nombre,Tipo,Marca,Modelo,Año,Patente,Estado,Último Mantenimiento,Observaciones\n';
+                
+                const vehiclesToExport = filteredVehicles.length > 0 ? filteredVehicles : allVehicles;
+                
+                vehiclesToExport.forEach(vehicle => {
+                    const row = [
+                        vehicle.name,
+                        vehicle.type,
+                        vehicle.brand,
+                        vehicle.model,
+                        vehicle.year,
+                        vehicle.plate || 'Sin patente',
+                        vehicle.status,
+                        vehicle.last_maintenance ? formatDate(vehicle.last_maintenance) : 'Nunca',
+                        vehicle.observations || ''
+                    ].map(field => `"${field}"`).join(',');
+                    
+                    csvContent += row + '\n';
+                });
+                
+                // Crear y descargar archivo
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', `vehiculos_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                alert(`✅ Exportados ${vehiclesToExport.length} vehículos exitosamente!`);
+                
+            } catch (error) {
+                console.error('Error exportando vehículos:', error);
+                alert('❌ Error al exportar: ' + error.message);
+            }
+        }
+        
+        // Función para enviar formulario de edición de vehículo
+                 async function submitEditVehicle(event, vehicleId) {
+             event.preventDefault();
+             
+             const form = event.target;
+             const formData = new FormData(form);
+             const vehicleData = Object.fromEntries(formData.entries());
+             vehicleData.id = vehicleId;
+             
+             try {
+                 const { ipcRenderer } = require('electron');
+                 const result = await ipcRenderer.invoke('db-update-vehicle', vehicleData);
+                 
+                 if (result.success) {
+                     alert('✅ Vehículo actualizado exitosamente!');
+                     closeModal();
+                     showVehiclesPage(); // Recargar página
+                 } else {
+                     alert('❌ Error al actualizar el vehículo');
+                 }
+             } catch (error) {
+                 console.error('Error actualizando vehículo:', error);
+                 alert('❌ Error: ' + error.message);
+             }
+         }
+         
+         // Función para mostrar la página de Mantenimientos
+         async function showMaintenancePage() {
+             const content = document.getElementById('page-content');
+             
+             // Mostrar loading
+             content.innerHTML = `
+                 <div class="maintenance-loading">
+                     <div class="spinner"></div>
+                     <p>Cargando mantenimientos...</p>
+                 </div>
+             `;
+             
+             try {
+                 // Obtener datos de la base de datos
+                 const { ipcRenderer } = require('electron');
+                 const [maintenance, vehicles] = await Promise.all([
+                     ipcRenderer.invoke('db-get-maintenance'),
+                     ipcRenderer.invoke('db-get-vehicles')
+                 ]);
+                 
+                 // Inicializar variables globales
+                 allMaintenance = maintenance;
+                 filteredMaintenance = [...maintenance];
+                 allVehiclesForMaintenance = vehicles;
+                 currentMaintenancePage = 1;
+                 
+                 // Calcular estadísticas
+                 const stats = calculateMaintenanceStats(maintenance);
+                 
+                 // Renderizar página de mantenimientos
+                 content.innerHTML = `
+                     <div class="maintenance-header">
+                         <h1 class="page-title maintenance-title">🔧 Gestión de Mantenimientos</h1>
+                         <div class="maintenance-actions">
+                             <button class="btn btn-primary" onclick="openNewMaintenanceModal()">
+                                 ➕ Nuevo Mantenimiento
+                             </button>
+                             <button class="btn btn-secondary" onclick="exportMaintenance()">
+                                 📥 Exportar
+                             </button>
+                             <button class="btn btn-info" onclick="showMaintenanceCalendar()">
+                                 📅 Calendario
+                             </button>
+                         </div>
+                     </div>
+                     
+                     <!-- Estadísticas de mantenimientos -->
+                     <div class="maintenance-stats">
+                         <div class="maintenance-stat-card pending">
+                             <div class="maintenance-stat-number">${stats.pending}</div>
+                             <div class="maintenance-stat-label">Pendientes</div>
+                         </div>
+                         <div class="maintenance-stat-card in-progress">
+                             <div class="maintenance-stat-number">${stats.inProgress}</div>
+                             <div class="maintenance-stat-label">En Proceso</div>
+                         </div>
+                         <div class="maintenance-stat-card completed">
+                             <div class="maintenance-stat-number">${stats.completed}</div>
+                             <div class="maintenance-stat-label">Completados</div>
+                         </div>
+                         <div class="maintenance-stat-card overdue">
+                             <div class="maintenance-stat-number">${stats.overdue}</div>
+                             <div class="maintenance-stat-label">Vencidos</div>
+                         </div>
+                     </div>
+                     
+                     <!-- Filtros y búsqueda -->
+                     <div class="search-filters">
+                         <h3 class="filters-title">🔍 Filtros y Búsqueda</h3>
+                         <div class="filters-grid">
+                             <div class="filter-group">
+                                 <label class="filter-label">Buscar por vehículo</label>
+                                 <input type="text" class="filter-input" id="search-maintenance-vehicle" placeholder="Nombre del vehículo..." onkeyup="filterMaintenance()">
+                             </div>
+                             <div class="filter-group">
+                                 <label class="filter-label">Tipo</label>
+                                 <select class="filter-input" id="filter-maintenance-type" onchange="filterMaintenance()">
+                                     <option value="">Todos los tipos</option>
+                                     <option value="Tractor">Tractor</option>
+                                     <option value="Cosechadora">Cosechadora</option>
+                                     <option value="Pulverizadora">Pulverizadora</option>
+                                     <option value="Sembradora">Sembradora</option>
+                                     <option value="Otro">Otro</option>
+                                 </select>
+                             </div>
+                             <div class="filter-group">
+                                 <label class="filter-label">Estado</label>
+                                 <select class="filter-input" id="filter-maintenance-status" onchange="filterMaintenance()">
+                                     <option value="">Todos los estados</option>
+                                     <option value="Pendiente">Pendiente</option>
+                                     <option value="En Proceso">En Proceso</option>
+                                     <option value="Completado">Completado</option>
+                                     <option value="Cancelado">Cancelado</option>
+                                 </select>
+                             </div>
+                             <div class="filter-group">
+                                 <label class="filter-label">Prioridad</label>
+                                 <select class="filter-input" id="filter-maintenance-priority" onchange="filterMaintenance()">
+                                     <option value="">Todas las prioridades</option>
+                                     <option value="Baja">Baja</option>
+                                     <option value="Media">Media</option>
+                                     <option value="Alta">Alta</option>
+                                     <option value="Urgente">Urgente</option>
+                                 </select>
+                             </div>
+                         </div>
+                         <div class="filters-actions">
+                             <button class="btn btn-secondary" onclick="clearMaintenanceFilters()">
+                                 🗑️ Limpiar Filtros
+                             </button>
+                             <span id="maintenance-count" style="color: #7f8c8d; font-weight: 500;"></span>
+                         </div>
+                     </div>
+                     
+                     <!-- Tabla de mantenimientos -->
+                     <div class="maintenance-table-container">
+                         <table class="maintenance-table" id="maintenance-table">
+                             <thead>
+                                 <tr>
+                                     <th>Vehículo</th>
+                                     <th>Descripción</th>
+                                     <th>Fecha Programada</th>
+                                     <th>Estado</th>
+                                     <th>Prioridad</th>
+                                     <th>Costo Estimado</th>
+                                     <th>Técnico</th>
+                                     <th>Acciones</th>
+                                 </tr>
+                             </thead>
+                             <tbody id="maintenance-tbody">
+                                 ${generateMaintenanceTableRows(maintenance, vehicles)}
+                             </tbody>
+                         </table>
+                         
+                         <!-- Paginación -->
+                         <div class="pagination" id="maintenance-pagination">
+                             ${generateMaintenancePagination(maintenance.length)}
+                         </div>
+                     </div>
+                 `;
+                 
+                 // Actualizar contador
+                 updateMaintenanceCount(maintenance.length);
+                 
+                 console.log('✅ Página de mantenimientos cargada correctamente');
+                 
+             } catch (error) {
+                 console.error('Error cargando página de mantenimientos:', error);
+                 content.innerHTML = `
+                     <div class="error-message">
+                         <h2>❌ Error al cargar los mantenimientos</h2>
+                         <p>${error.message}</p>
+                         <button class="btn btn-primary" onclick="showMaintenancePage()">
+                             🔄 Reintentar
+                         </button>
+                     </div>
+                 `;
+             }
+         }
+         
+         // Variables globales para mantenimientos
+         let allMaintenance = [];
+         let filteredMaintenance = [];
+         let allVehiclesForMaintenance = [];
+         let currentMaintenancePage = 1;
+         
+         // Función para calcular estadísticas de mantenimientos
+         function calculateMaintenanceStats(maintenance) {
+             const today = new Date();
+             today.setHours(0, 0, 0, 0);
+             
+             let pending = 0, inProgress = 0, completed = 0, overdue = 0;
+             
+             maintenance.forEach(m => {
+                 const scheduledDate = new Date(m.start_date);
+                 scheduledDate.setHours(0, 0, 0, 0);
+                 
+                 switch (m.status) {
+                     case 'Pendiente':
+                         if (scheduledDate < today) {
+                             overdue++;
+                         } else {
+                             pending++;
+                         }
+                         break;
+                     case 'En Proceso':
+                         inProgress++;
+                         break;
+                     case 'Completado':
+                         completed++;
+                         break;
+                 }
+             });
+             
+             return { pending, inProgress, completed, overdue };
+         }
+         
+         // Función para generar filas de la tabla de mantenimientos
+         function generateMaintenanceTableRows(maintenance, vehicles) {
+             if (!maintenance || maintenance.length === 0) {
+                 return `
+                     <tr>
+                         <td colspan="8">
+                             <div class="no-maintenance">
+                                 <h3>🔧 No hay mantenimientos registrados</h3>
+                                 <p>Comienza programando el primer mantenimiento</p>
+                                 <button class="btn btn-primary" onclick="openNewMaintenanceModal()">
+                                     ➕ Programar Primer Mantenimiento
+                                 </button>
+                             </div>
+                         </td>
+                     </tr>
+                 `;
+             }
+             
+             // Crear mapa de vehículos para búsqueda rápida
+             const vehicleMap = {};
+             vehicles.forEach(v => vehicleMap[v.id] = v);
+             
+             return maintenance.map(m => {
+                 const vehicle = vehicleMap[m.vehicle_id] || { name: 'Vehículo no encontrado' };
+                 const isOverdue = new Date(m.start_date) < new Date() && m.status === 'Pendiente';
+                 
+                 return `
+                     <tr data-maintenance-id="${m.id}" ${isOverdue ? 'style="background-color: #fdf2f2;"' : ''}>
+                         <td>
+                             <div class="maintenance-vehicle">${vehicle.name}</div>
+                             <div class="maintenance-details">ID: ${vehicle.id || 'N/A'}</div>
+                         </td>
+                         <td>
+                             <div class="maintenance-vehicle">${m.description}</div>
+                             ${m.notes ? `<div class="maintenance-details">${m.notes.substring(0, 50)}${m.notes.length > 50 ? '...' : ''}</div>` : ''}
+                         </td>
+                         <td>
+                             ${formatDate(m.start_date)}
+                             ${isOverdue ? '<div style="color: #e74c3c; font-size: 0.8rem; font-weight: 600;">⚠️ VENCIDO</div>' : ''}
+                         </td>
+                         <td>
+                             <span class="status-badge status-${m.status.toLowerCase().replace(' ', '-')}">
+                                 ${m.status}
+                             </span>
+                         </td>
+                         <td>
+                             <span class="maintenance-priority priority-${m.priority.toLowerCase()}">
+                                 ${m.priority}
+                             </span>
+                         </td>
+                         <td>
+                             <span class="maintenance-cost">
+                                 $${formatCurrency(m.estimated_cost || 0)}
+                             </span>
+                         </td>
+                         <td>${m.technician || 'Sin asignar'}</td>
+                         <td>
+                             <div class="maintenance-actions">
+                                 <button class="btn btn-primary btn-sm" onclick="viewMaintenanceDetails(${m.id})">
+                                     👁️ Ver
+                                 </button>
+                                 <button class="btn btn-warning btn-sm" onclick="editMaintenance(${m.id})">
+                                     ✏️ Editar
+                                 </button>
+                                 <button class="btn btn-danger btn-sm" onclick="deleteMaintenance(${m.id})">
+                                     🗑️ Eliminar
+                                 </button>
+                             </div>
+                         </td>
+                     </tr>
+                 `;
+             }).join('');
+         }
+         
+         // Función para generar paginación de mantenimientos
+         function generateMaintenancePagination(totalItems) {
+             const itemsPerPage = 10;
+             const totalPages = Math.ceil(totalItems / itemsPerPage);
+             
+             if (totalPages <= 1) return '';
+             
+             let paginationHTML = '';
+             
+             // Botón anterior
+             paginationHTML += `
+                 <button onclick="changeMaintenancePage(1)" ${currentMaintenancePage === 1 ? 'disabled' : ''}>
+                     ⏮️ Primera
+                 </button>
+                 <button onclick="changeMaintenancePage(${currentMaintenancePage - 1})" ${currentMaintenancePage === 1 ? 'disabled' : ''}>
+                     ◀️ Anterior
+                 </button>
+             `;
+             
+             // Números de página
+             for (let i = Math.max(1, currentMaintenancePage - 2); i <= Math.min(totalPages, currentMaintenancePage + 2); i++) {
+                 paginationHTML += `
+                     <button onclick="changeMaintenancePage(${i})" class="${i === currentMaintenancePage ? 'current-page' : ''}">
+                         ${i}
+                     </button>
+                 `;
+             }
+             
+             // Botón siguiente
+             paginationHTML += `
+                 <button onclick="changeMaintenancePage(${currentMaintenancePage + 1})" ${currentMaintenancePage === totalPages ? 'disabled' : ''}>
+                     Siguiente ▶️
+                 </button>
+                 <button onclick="changeMaintenancePage(${totalPages})" ${currentMaintenancePage === totalPages ? 'disabled' : ''}>
+                     Última ⏭️
+                 </button>
+             `;
+             
+             return paginationHTML;
+         }
+         
+         // Función para filtrar mantenimientos
+         function filterMaintenance() {
+             const searchVehicle = document.getElementById('search-maintenance-vehicle').value.toLowerCase();
+             const filterType = document.getElementById('filter-maintenance-type').value;
+             const filterStatus = document.getElementById('filter-maintenance-status').value;
+             const filterPriority = document.getElementById('filter-maintenance-priority').value;
+             
+             filteredMaintenance = allMaintenance.filter(maintenance => {
+                 // Buscar por nombre del vehículo (texto aproximado)
+                 const vehicle = allVehiclesForMaintenance.find(v => v.id === maintenance.vehicle_id);
+                 const matchesVehicle = !searchVehicle || (vehicle && vehicle.name.toLowerCase().includes(searchVehicle));
+                 
+                 // Filtrar por tipo de vehículo
+                 const matchesType = !filterType || (vehicle && vehicle.type === filterType);
+                 
+                 // Filtrar por estado y prioridad
+                 const matchesStatus = !filterStatus || maintenance.status === filterStatus;
+                 const matchesPriority = !filterPriority || maintenance.priority === filterPriority;
+                 
+                 return matchesVehicle && matchesType && matchesStatus && matchesPriority;
+             });
+             
+             // Actualizar tabla
+             const tbody = document.getElementById('maintenance-tbody');
+             tbody.innerHTML = generateMaintenanceTableRows(filteredMaintenance, allVehiclesForMaintenance);
+             
+             // Actualizar contador
+             updateMaintenanceCount(filteredMaintenance.length);
+             
+             // Actualizar paginación
+             currentMaintenancePage = 1;
+             const pagination = document.getElementById('maintenance-pagination');
+             if (pagination) {
+                 pagination.innerHTML = generateMaintenancePagination(filteredMaintenance.length);
+             }
+         }
+         
+         // Función para limpiar filtros de mantenimientos
+         function clearMaintenanceFilters() {
+             document.getElementById('search-maintenance-vehicle').value = '';
+             document.getElementById('filter-maintenance-type').value = '';
+             document.getElementById('filter-maintenance-status').value = '';
+             document.getElementById('filter-maintenance-priority').value = '';
+             
+             filteredMaintenance = [...allMaintenance];
+             
+             // Actualizar tabla
+             const tbody = document.getElementById('maintenance-tbody');
+             tbody.innerHTML = generateMaintenanceTableRows(filteredMaintenance, allVehiclesForMaintenance);
+             
+             // Actualizar contador
+             updateMaintenanceCount(filteredMaintenance.length);
+             
+             // Actualizar paginación
+             currentMaintenancePage = 1;
+             const pagination = document.getElementById('maintenance-pagination');
+             if (pagination) {
+                 pagination.innerHTML = generateMaintenancePagination(filteredMaintenance.length);
+             }
+         }
+         
+         // Función para actualizar contador de mantenimientos
+         function updateMaintenanceCount(count) {
+             const countElement = document.getElementById('maintenance-count');
+             if (countElement) {
+                 countElement.textContent = `${count} mantenimiento${count !== 1 ? 's' : ''} encontrado${count !== 1 ? 's' : ''}`;
+             }
+         }
+         
+         // Función para cambiar página de mantenimientos
+         function changeMaintenancePage(page) {
+             currentMaintenancePage = page;
+             // Aquí implementarías la lógica de paginación
+             const pagination = document.getElementById('maintenance-pagination');
+             if (pagination) {
+                 pagination.innerHTML = generateMaintenancePagination(filteredMaintenance.length);
+             }
+         }
+         
+         // Función para ver detalles del mantenimiento
+         function viewMaintenanceDetails(maintenanceId) {
+             const maintenance = allMaintenance.find(m => m.id === maintenanceId);
+             const vehicle = allVehiclesForMaintenance.find(v => v.id === maintenance.vehicle_id);
+             
+             if (!maintenance) return;
+             
+             openModal(`🔧 Mantenimiento: ${maintenance.description}`);
+             document.getElementById('modal-body').innerHTML = `
+                 <div style="padding: 20px;">
+                     <h3 style="color: #2c3e50; margin-bottom: 20px;">Información del Mantenimiento</h3>
+                     
+                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                         <div>
+                             <strong>Vehículo:</strong> ${vehicle ? vehicle.name : 'No encontrado'}
+                         </div>
+                         <div>
+                             <strong>Fecha Programada:</strong> ${formatDate(maintenance.scheduled_date)}
+                         </div>
+                         <div>
+                             <strong>Estado:</strong> 
+                             <span class="status-badge status-${maintenance.status.toLowerCase().replace(' ', '-')}">
+                                 ${maintenance.status}
+                             </span>
+                         </div>
+                         <div>
+                             <strong>Prioridad:</strong> 
+                             <span class="maintenance-priority priority-${maintenance.priority.toLowerCase()}">
+                                 ${maintenance.priority}
+                             </span>
+                         </div>
+                         <div>
+                             <strong>Costo Estimado:</strong> 
+                             <span class="maintenance-cost">$${formatCurrency(maintenance.estimated_cost || 0)}</span>
+                         </div>
+                         <div>
+                             <strong>Técnico:</strong> ${maintenance.technician || 'Sin asignar'}
+                         </div>
+                     </div>
+                     
+                     <div style="margin-bottom: 20px;">
+                         <strong>Descripción:</strong>
+                         <p style="margin-top: 5px; color: #666;">${maintenance.description}</p>
+                     </div>
+                     
+                     ${maintenance.notes ? `
+                         <div style="margin-bottom: 20px;">
+                             <strong>Notas:</strong>
+                             <p style="margin-top: 5px; color: #666;">${maintenance.notes}</p>
+                         </div>
+                     ` : ''}
+                     
+                     <div style="text-align: center; margin-top: 30px;">
+                         <button class="btn btn-warning" onclick="editMaintenance(${maintenance.id})">
+                             ✏️ Editar Mantenimiento
+                         </button>
+                     </div>
+                 </div>
+             `;
+         }
+         
+         // Función para editar mantenimiento
+         function editMaintenance(maintenanceId) {
+             const maintenance = allMaintenance.find(m => m.id === maintenanceId);
+             if (!maintenance) return;
+             
+             openModal(`✏️ Editar Mantenimiento`);
+             document.getElementById('modal-body').innerHTML = `
+                 <form id="edit-maintenance-form" onsubmit="submitEditMaintenance(event, ${maintenance.id})">
+                     <div class="form-row">
+                         <div class="form-group">
+                             <label class="form-label">Vehículo *</label>
+                             <select class="form-select" name="vehicle_id" required>
+                                 ${allVehiclesForMaintenance.map(v => 
+                                     `<option value="${v.id}" ${v.id === maintenance.vehicle_id ? 'selected' : ''}>${v.name}</option>`
+                                 ).join('')}
+                             </select>
+                         </div>
+                         <div class="form-group">
+                             <label class="form-label">Fecha Programada *</label>
+                             <input type="date" class="form-input" name="scheduled_date" required value="${maintenance.scheduled_date}">
+                         </div>
+                     </div>
+                     
+                     <div class="form-group">
+                         <label class="form-label">Descripción *</label>
+                         <input type="text" class="form-input" name="description" required value="${maintenance.description}">
+                     </div>
+                     
+                     <div class="form-row">
+                         <div class="form-group">
+                             <label class="form-label">Estado *</label>
+                             <select class="form-select" name="status" required>
+                                 <option value="Pendiente" ${maintenance.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                                 <option value="En Proceso" ${maintenance.status === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
+                                 <option value="Completado" ${maintenance.status === 'Completado' ? 'selected' : ''}>Completado</option>
+                                 <option value="Cancelado" ${maintenance.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+                             </select>
+                         </div>
+                         <div class="form-group">
+                             <label class="form-label">Prioridad *</label>
+                             <select class="form-select" name="priority" required>
+                                 <option value="Baja" ${maintenance.priority === 'Baja' ? 'selected' : ''}>Baja</option>
+                                 <option value="Media" ${maintenance.priority === 'Media' ? 'selected' : ''}>Media</option>
+                                 <option value="Alta" ${maintenance.priority === 'Alta' ? 'selected' : ''}>Alta</option>
+                                 <option value="Urgente" ${maintenance.priority === 'Urgente' ? 'selected' : ''}>Urgente</option>
+                             </select>
+                         </div>
+                     </div>
+                     
+                     <div class="form-row">
+                         <div class="form-group">
+                             <label class="form-label">Costo Estimado</label>
+                             <input type="number" class="form-input" name="estimated_cost" step="0.01" min="0" value="${maintenance.estimated_cost || ''}">
+                         </div>
+                         <div class="form-group">
+                             <label class="form-label">Técnico</label>
+                             <input type="text" class="form-input" name="technician" value="${maintenance.technician || ''}">
+                         </div>
+                     </div>
+                     
+                     <div class="form-group">
+                         <label class="form-label">Notas</label>
+                         <textarea class="form-textarea" name="notes">${maintenance.notes || ''}</textarea>
+                     </div>
+                     
+                     <div class="form-actions">
+                         <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                         <button type="submit" class="btn btn-warning">Actualizar Mantenimiento</button>
+                     </div>
+                 </form>
+             `;
+         }
+         
+         // Función para eliminar mantenimiento
+         async function deleteMaintenance(maintenanceId) {
+             if (!confirm('¿Estás seguro de que quieres eliminar este mantenimiento? Esta acción no se puede deshacer.')) {
+                 return;
+             }
+             
+             try {
+                 const { ipcRenderer } = require('electron');
+                 const result = await ipcRenderer.invoke('db-delete-maintenance', maintenanceId);
+                 
+                 if (result.success) {
+                     alert('✅ Mantenimiento eliminado exitosamente!');
+                     showMaintenancePage(); // Recargar página
+                 } else {
+                     alert('❌ Error al eliminar el mantenimiento: ' + (result.message || 'Error desconocido'));
+                 }
+             } catch (error) {
+                 console.error('Error eliminando mantenimiento:', error);
+                 alert('❌ Error: ' + error.message);
+             }
+         }
+         
+         // Función para exportar mantenimientos
+         function exportMaintenance() {
+             try {
+                 // Crear contenido CSV
+                 let csvContent = 'Vehículo,Descripción,Fecha Programada,Estado,Prioridad,Costo Estimado,Técnico,Notas\n';
+                 
+                 const maintenanceToExport = filteredMaintenance.length > 0 ? filteredMaintenance : allMaintenance;
+                 
+                 maintenanceToExport.forEach(maintenance => {
+                     const vehicle = allVehiclesForMaintenance.find(v => v.id === maintenance.vehicle_id);
+                     const row = [
+                         vehicle ? vehicle.name : 'Vehículo no encontrado',
+                         maintenance.description,
+                         formatDate(maintenance.scheduled_date),
+                         maintenance.status,
+                         maintenance.priority,
+                         maintenance.estimated_cost || 0,
+                         maintenance.technician || 'Sin asignar',
+                         maintenance.notes || ''
+                     ].map(field => `"${field}"`).join(',');
+                     
+                     csvContent += row + '\n';
+                 });
+                 
+                 // Crear y descargar archivo
+                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                 const link = document.createElement('a');
+                 const url = URL.createObjectURL(blob);
+                 link.setAttribute('href', url);
+                 link.setAttribute('download', `mantenimientos_${new Date().toISOString().split('T')[0]}.csv`);
+                 link.style.visibility = 'hidden';
+                 document.body.appendChild(link);
+                 link.click();
+                 document.body.removeChild(link);
+                 
+                 alert(`✅ Exportados ${maintenanceToExport.length} mantenimientos exitosamente!`);
+                 
+             } catch (error) {
+                 console.error('Error exportando mantenimientos:', error);
+                 alert('❌ Error al exportar: ' + error.message);
+             }
+         }
+         
+         // Función para mostrar calendario de mantenimientos
+         function showMaintenanceCalendar() {
+             console.log('🗓️ Abriendo calendario de mantenimientos...');
+             console.log('Mantenimientos disponibles:', allMaintenance.length);
+             
+             openModal('📅 Calendario de Mantenimientos');
+             
+             const today = new Date();
+             currentCalendarMonth = today.getMonth();
+             currentCalendarYear = today.getFullYear();
+             
+             console.log(`Generando calendario para ${getMonthName(currentCalendarMonth)} ${currentCalendarYear}`);
+             
+             // Generar calendario del mes actual
+             const calendarHTML = generateMaintenanceCalendar(currentCalendarMonth, currentCalendarYear);
+             console.log('HTML del calendario generado:', calendarHTML.length, 'caracteres');
+             
+             const modalContent = `
+                 <div style="padding: 20px;">
+                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                         <h3 id="calendar-month-title" style="color: #2c3e50; margin: 0;">${getMonthName(currentCalendarMonth)} ${currentCalendarYear}</h3>
+                         <div style="display: flex; gap: 10px;">
+                             <button class="btn btn-secondary btn-sm" onclick="changeCalendarMonth(-1)">
+                                 ◀️ Mes Anterior
+                             </button>
+                             <button class="btn btn-secondary btn-sm" onclick="changeCalendarMonth(1)">
+                                 Mes Siguiente ▶️
+                             </button>
+                         </div>
+                     </div>
+                     
+                     <div class="maintenance-calendar" id="maintenance-calendar-container">
+                         ${calendarHTML}
+                     </div>
+                     
+                     <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                         <h4 style="color: #2c3e50; margin-bottom: 15px;">Leyenda del Calendario</h4>
+                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
+                             <div>
+                                 <span class="maintenance-priority priority-low">Baja</span> - Mantenimientos de prioridad baja
+                             </div>
+                             <div>
+                                 <span class="maintenance-priority priority-medium">Media</span> - Mantenimientos de prioridad media
+                             </div>
+                             <div>
+                                 <span class="maintenance-priority priority-high">Alta</span> - Mantenimientos de prioridad alta
+                             </div>
+                             <div>
+                                 <span class="maintenance-priority priority-urgent">Urgente</span> - Mantenimientos urgentes
+                             </div>
+                         </div>
+                         
+                         <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                             <p style="margin: 0; color: #6c757d; font-size: 0.85rem;">
+                                 📊 Total de mantenimientos programados: <strong>${allMaintenance.length}</strong>
+                             </p>
+                         </div>
+                     </div>
+                 </div>
+             `;
+             
+             document.getElementById('modal-body').innerHTML = modalContent;
+             console.log('✅ Calendario renderizado en modal');
+         }
+         
+         // Variables globales para el calendario
+         let currentCalendarMonth = new Date().getMonth();
+         let currentCalendarYear = new Date().getFullYear();
+         
+                 // Función para generar el HTML del calendario
+        function generateMaintenanceCalendar(month, year) {
+            console.log(`📅 Generando calendario para: ${month}/${year}`);
+            console.log(`📊 Mantenimientos disponibles:`, allMaintenance.length);
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+            
+            console.log(`📅 Primer día: ${firstDay.toDateString()}, Último día: ${lastDay.toDateString()}`);
+            console.log(`📅 Días en el mes: ${daysInMonth}, Día de inicio: ${startingDayOfWeek}`);
+            
+            let calendarHTML = `
+                <div class="calendar-header">
+                    <div class="calendar-day-header">Dom</div>
+                    <div class="calendar-day-header">Lun</div>
+                    <div class="calendar-day-header">Mar</div>
+                    <div class="calendar-day-header">Mié</div>
+                    <div class="calendar-day-header">Jue</div>
+                    <div class="calendar-day-header">Vie</div>
+                    <div class="calendar-day-header">Sáb</div>
+                </div>
+                <div class="calendar-grid">
+            `;
+            
+            let dayCount = 1;
+            let weekCount = 0;
+            
+            // Generar 6 semanas máximo
+            while (weekCount < 6 && dayCount <= daysInMonth) {
+                let weekHTML = '<div class="calendar-week">';
+                
+                // Generar 7 días por semana
+                for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+                    if (weekCount === 0 && dayOfWeek < startingDayOfWeek) {
+                        // Días vacíos al inicio del mes
+                        weekHTML += `<div class="calendar-day other-month"><div class="calendar-day-number"></div></div>`;
+                    } else if (dayCount <= daysInMonth) {
+                        // Días del mes actual
+                        const currentDate = new Date(year, month, dayCount);
+                        const isToday = currentDate.toDateString() === new Date().toDateString();
+                        const dayMaintenance = getMaintenanceForDate(currentDate);
+                        
+                        console.log(`📅 Día ${dayCount}: ${currentDate.toDateString()}, Mantenimientos: ${dayMaintenance.length}`);
+                        
+                        weekHTML += `
+                            <div class="calendar-day ${isToday ? 'today' : ''}">
+                                <div class="calendar-day-number">${dayCount}</div>
+                                ${dayMaintenance.length > 0 ? `
+                                    <div class="calendar-maintenance-count">
+                                        <span class="maintenance-priority priority-${dayMaintenance[0].priority.toLowerCase()}">
+                                            ${dayMaintenance.length}
+                                        </span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                        dayCount++;
+                    } else {
+                        // Días vacíos al final del mes
+                        weekHTML += `<div class="calendar-day other-month"><div class="calendar-day-number"></div></div>`;
+                    }
+                }
+                
+                weekHTML += '</div>';
+                calendarHTML += weekHTML;
+                weekCount++;
+            }
+            
+            calendarHTML += '</div>';
+            console.log(`📅 HTML del calendario generado:`, calendarHTML.substring(0, 200) + '...');
+            return calendarHTML;
+        }
+         
+                 // Función para obtener mantenimientos de una fecha específica
+        function getMaintenanceForDate(date) {
+            console.log(`🔍 Buscando mantenimientos para fecha: ${date.toDateString()}`);
+            console.log(`📊 Total mantenimientos: ${allMaintenance.length}`);
+            
+            const dateString = date.toISOString().split('T')[0];
+            console.log(`📅 Fecha en formato ISO: ${dateString}`);
+            
+            const filteredMaintenance = allMaintenance.filter(m => {
+                console.log(`🔍 Mantenimiento:`, m);
+                console.log(`📅 Fecha del mantenimiento (start_date): ${m.start_date}`);
+                
+                if (!m.start_date) {
+                    console.log(`⚠️ Mantenimiento sin fecha de inicio`);
+                    return false;
+                }
+                
+                const maintenanceDate = new Date(m.start_date);
+                const maintenanceDateString = maintenanceDate.toISOString().split('T')[0];
+                console.log(`📅 Fecha del mantenimiento en formato ISO: ${maintenanceDateString}`);
+                
+                const matches = maintenanceDateString === dateString;
+                console.log(`✅ ¿Coincide? ${matches}`);
+                return matches;
+            });
+            
+            console.log(`📊 Mantenimientos encontrados para ${dateString}: ${filteredMaintenance.length}`);
+            return filteredMaintenance;
+        }
+         
+         // Función para cambiar mes en el calendario
+         function changeCalendarMonth(direction) {
+             console.log(`📅 Cambiando mes: ${direction > 0 ? 'siguiente' : 'anterior'}`);
+             
+             currentCalendarMonth += direction;
+             
+             if (currentCalendarMonth < 0) {
+                 currentCalendarMonth = 11;
+                 currentCalendarYear--;
+             } else if (currentCalendarMonth > 11) {
+                 currentCalendarMonth = 0;
+                 currentCalendarYear++;
+             }
+             
+             console.log(`Nuevo mes: ${getMonthName(currentCalendarMonth)} ${currentCalendarYear}`);
+             
+             // Regenerar calendario
+             const calendarContainer = document.getElementById('maintenance-calendar-container');
+             if (calendarContainer) {
+                 const newCalendarHTML = generateMaintenanceCalendar(currentCalendarMonth, currentCalendarYear);
+                 calendarContainer.innerHTML = newCalendarHTML;
+                 console.log('✅ Calendario actualizado');
+             } else {
+                 console.error('❌ No se encontró el contenedor del calendario');
+             }
+             
+             // Actualizar título del mes
+             const monthTitle = document.getElementById('calendar-month-title');
+             if (monthTitle) {
+                 monthTitle.textContent = `${getMonthName(currentCalendarMonth)} ${currentCalendarYear}`;
+                 console.log('✅ Título actualizado');
+             } else {
+                 console.error('❌ No se encontró el título del mes');
+             }
+         }
+         
+         // Función para obtener nombre del mes
+         function getMonthName(month) {
+             const months = [
+                 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+             ];
+             return months[month];
+         }
+         
+         // Función para enviar formulario de edición de mantenimiento
+         async function submitEditMaintenance(event, maintenanceId) {
+             event.preventDefault();
+             
+             const form = event.target;
+             const formData = new FormData(form);
+             const maintenanceData = Object.fromEntries(formData.entries());
+             
+             try {
+                 const { ipcRenderer } = require('electron');
+                 const result = await ipcRenderer.invoke('db-update-maintenance', maintenanceId, maintenanceData);
+                 
+                 if (result.success) {
+                     alert('✅ Mantenimiento actualizado exitosamente!');
+                     closeModal();
+                     showMaintenancePage(); // Recargar página
+                 } else {
+                     alert('❌ Error al actualizar el mantenimiento');
+                 }
+             } catch (error) {
+                 console.error('Error actualizando mantenimiento:', error);
+                 alert('❌ Error: ' + error.message);
+             }
+         }
+        
+        // Función para formatear moneda
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-AR').format(amount);
+        }
+        
+        // Función para formatear fecha
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-AR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        
+        // Función para obtener color de estado
+        function getStatusColor(status) {
+            const colors = {
+                'Activo': '#27ae60',
+                'Mantenimiento': '#f39c12',
+                'Reparación': '#e74c3c',
+                'Fuera de Servicio': '#95a5a6'
+            };
+            return colors[status] || '#3498db';
+        }
+        
+        // Funciones para manejar modales
+        function openModal(title) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.getElementById('modal-body').innerHTML = '';
+        }
+        
+        // Función para abrir modal de nuevo vehículo
+        function openNewVehicleModal() {
+            openModal('🚗 Nuevo Vehículo');
+            document.getElementById('modal-body').innerHTML = `
+                <form id="vehicle-form" onsubmit="submitVehicle(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Vehículo *</label>
+                            <input type="text" class="form-input" name="name" required placeholder="Ej: Tractor JD 5075E">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipo *</label>
+                            <select class="form-select" name="type" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="Tractor">Tractor</option>
+                                <option value="Cosechadora">Cosechadora</option>
+                                <option value="Pulverizadora">Pulverizadora</option>
+                                <option value="Sembradora">Sembradora</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Marca *</label>
+                            <input type="text" class="form-input" name="brand" required placeholder="Ej: John Deere">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Modelo *</label>
+                            <input type="text" class="form-input" name="model" required placeholder="Ej: 5075E">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Año *</label>
+                            <input type="number" class="form-input" name="year" required min="1900" max="2030" placeholder="2020">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Patente/Matrícula</label>
+                            <input type="text" class="form-input" name="plate" placeholder="Ej: ABC123">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Estado *</label>
+                        <select class="form-select" name="status" required>
+                            <option value="">Seleccionar estado</option>
+                            <option value="Activo">Activo</option>
+                            <option value="Mantenimiento">Mantenimiento</option>
+                            <option value="Reparación">Reparación</option>
+                            <option value="Fuera de Servicio">Fuera de Servicio</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Observaciones</label>
+                        <textarea class="form-textarea" name="observations" placeholder="Información adicional sobre el vehículo..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear Vehículo</button>
+                    </div>
+                </form>
+            `;
+        }
+        
+        // Función para abrir modal de nuevo mantenimiento
+        function openNewMaintenanceModal() {
+            openModal('🔧 Nuevo Mantenimiento');
+            document.getElementById('modal-body').innerHTML = `
+                <form id="maintenance-form" onsubmit="submitMaintenance(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Vehículo *</label>
+                            <select class="form-select" name="vehicle_id" required id="maintenance-vehicle-select">
+                                <option value="">Seleccionar vehículo</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tipo de Mantenimiento *</label>
+                            <select class="form-select" name="type" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="Preventivo">Preventivo</option>
+                                <option value="Correctivo">Correctivo</option>
+                                <option value="Reparación">Reparación</option>
+                                <option value="Inspección">Inspección</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Descripción *</label>
+                        <textarea class="form-textarea" name="description" required placeholder="Describa el trabajo a realizar..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Fecha de Inicio *</label>
+                            <input type="date" class="form-input" name="start_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fecha de Finalización</label>
+                            <input type="date" class="form-input" name="end_date">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Técnico Responsable</label>
+                            <input type="text" class="form-input" name="technician" placeholder="Nombre del técnico">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Prioridad *</label>
+                            <select class="form-select" name="priority" required>
+                                <option value="">Seleccionar prioridad</option>
+                                <option value="Baja">Baja</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Crítica">Crítica</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Costo Estimado</label>
+                        <input type="number" class="form-input" name="cost" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Crear Mantenimiento</button>
+                    </div>
+                </form>
+            `;
+            
+            // Cargar lista de vehículos
+            loadVehiclesForMaintenance();
+        }
+        
+        // Función para abrir modal de nuevo repuesto
+        function openNewPartModal() {
+            openModal('⚙️ Nuevo Repuesto');
+            document.getElementById('modal-body').innerHTML = `
+                <form id="part-form" onsubmit="submitPart(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Repuesto *</label>
+                            <input type="text" class="form-input" name="name" required placeholder="Ej: Filtro de Aceite">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Código *</label>
+                            <input type="text" class="form-input" name="code" required placeholder="Ej: FO-001">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Categoría *</label>
+                            <select class="form-select" name="category" required>
+                                <option value="">Seleccionar categoría</option>
+                                <option value="Filtros">Filtros</option>
+                                <option value="Lubricantes">Lubricantes</option>
+                                <option value="Repuestos Mecánicos">Repuestos Mecánicos</option>
+                                <option value="Repuestos Eléctricos">Repuestos Eléctricos</option>
+                                <option value="Herramientas">Herramientas</option>
+                                <option value="Otros">Otros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Proveedor</label>
+                            <input type="text" class="form-input" name="supplier" placeholder="Nombre del proveedor">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Stock Inicial *</label>
+                            <input type="number" class="form-input" name="stock" required min="0" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stock Mínimo *</label>
+                            <input type="number" class="form-input" name="min_stock" required min="0" placeholder="5">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Precio Unitario</label>
+                        <input type="number" class="form-input" name="price" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-textarea" name="description" placeholder="Información adicional sobre el repuesto..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Crear Repuesto</button>
+                    </div>
+                </form>
+            `;
+        }
+        
+        // Función para cargar vehículos en el modal de mantenimiento
+        async function loadVehiclesForMaintenance() {
+            try {
+                const { ipcRenderer } = require('electron');
+                const vehicles = await ipcRenderer.invoke('db-get-vehicles');
+                
+                const select = document.getElementById('maintenance-vehicle-select');
+                select.innerHTML = '<option value="">Seleccionar vehículo</option>';
+                
+                vehicles.forEach(vehicle => {
+                    const option = document.createElement('option');
+                    option.value = vehicle.id;
+                    option.textContent = `${vehicle.name} (${vehicle.plate || 'Sin patente'})`;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error cargando vehículos:', error);
+            }
+        }
+        
+        // Función para enviar formulario de vehículo
+        async function submitVehicle(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const vehicleData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { ipcRenderer } = require('electron');
+                const result = await ipcRenderer.invoke('db-add-vehicle', vehicleData);
+                
+                if (result.success) {
+                    alert('✅ Vehículo creado exitosamente!');
+                    closeModal();
+                    refreshDashboard(); // Actualizar dashboard
+                } else {
+                    alert('❌ Error al crear el vehículo');
+                }
+            } catch (error) {
+                console.error('Error creando vehículo:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        // Función para enviar formulario de mantenimiento
+        async function submitMaintenance(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const maintenanceData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { ipcRenderer } = require('electron');
+                const result = await ipcRenderer.invoke('db-add-maintenance', maintenanceData);
+                
+                if (result.success) {
+                    alert('✅ Mantenimiento creado exitosamente!');
+                    closeModal();
+                    refreshDashboard(); // Actualizar dashboard
+                } else {
+                    alert('❌ Error al crear el mantenimiento');
+                }
+            } catch (error) {
+                console.error('Error creando mantenimiento:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        // Función para enviar formulario de repuesto
+        async function submitPart(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            const partData = Object.fromEntries(formData.entries());
+            
+            try {
+                const { ipcRenderer } = require('electron');
+                const result = await ipcRenderer.invoke('db-add-part', partData);
+                
+                if (result.success) {
+                    alert('✅ Repuesto creado exitosamente!');
+                    closeModal();
+                    refreshDashboard(); // Actualizar dashboard
+                } else {
+                    alert('❌ Error al crear el repuesto');
+                }
+            } catch (error) {
+                console.error('Error creando repuesto:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+        
+        // Función para mostrar información
+        function showInfo() {
+            alert('Sistema Taller Forzani v1.0.0\\nDesarrollado para Grupo Forzani\\n\\n✅ Aplicación funcionando correctamente');
+        }
+        
+        // Función para mostrar información
+        function showInfo() {
+            alert('Sistema Taller Forzani v1.0.0\\nDesarrollado para Grupo Forzani\\n\\n✅ Aplicación funcionando correctamente');
+        }
+        
+        // Función para probar la base de datos
+        async function testDatabase() {
+            try {
+                // Verificar si estamos en Electron
+                if (typeof require !== 'undefined') {
+                    const { ipcRenderer } = require('electron');
+                    const vehicles = await ipcRenderer.invoke('db-get-vehicles');
+                    alert(`✅ Base de datos conectada!\\n\\nVehículos encontrados: ${vehicles.length}`);
+                } else {
+                    alert('⚠️ No estamos en Electron, no se puede conectar a la base de datos');
+                }
+            } catch (error) {
+                console.error('Error probando base de datos:', error);
+                alert('❌ Error conectando a la base de datos: ' + error.message);
+            }
+        }
+        
+        // Inicializar aplicación
+        function init() {
+            console.log('Inicializando aplicación...');
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(showApp, 500);
+                });
+            } else {
+                setTimeout(showApp, 500);
+            }
+            
+            // Configurar cierre del modal al hacer clic fuera
+            document.getElementById('modal-overlay').addEventListener('click', (e) => {
+                if (e.target.id === 'modal-overlay') {
+                    closeModal();
+                }
+            });
+        }
+        
+        // Iniciar
+        init();
+    </script>
+    
+    <!-- Modal para formularios -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Nuevo Elemento</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- El contenido del modal se insertará aquí -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -295,6 +295,15 @@ class TallerDatabase {
         });
     }
 
+    deletePart(id) {
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM parts WHERE id = ?', [id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    }
+
     // Métodos para mantenimientos
     getAllMaintenance() {
         return new Promise((resolve, reject) => {
@@ -342,6 +351,40 @@ class TallerDatabase {
             ], function(err) {
                 if (err) reject(err);
                 else resolve({ id: this.lastID });
+            });
+        });
+    }
+
+    updateMaintenance(id, maintenance) {
+        return new Promise((resolve, reject) => {
+            this.db.run(`
+                UPDATE maintenance 
+                SET vehicle_id = ?, type = ?, description = ?, start_date = ?, end_date = ?, 
+                    status = ?, technician = ?, cost = ?, priority = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            `, [
+                maintenance.vehicleId, 
+                maintenance.type, 
+                maintenance.description, 
+                maintenance.startDate, 
+                maintenance.endDate, 
+                maintenance.status, 
+                maintenance.technician, 
+                maintenance.cost, 
+                maintenance.priority,
+                id
+            ], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
+            });
+        });
+    }
+
+    deleteMaintenance(id) {
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM maintenance WHERE id = ?', [id], function(err) {
+                if (err) reject(err);
+                else resolve({ changes: this.changes });
             });
         });
     }

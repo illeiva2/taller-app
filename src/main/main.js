@@ -17,7 +17,9 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      webSecurity: false,
+      allowRunningInsecureContent: true
     },
     icon: path.join(__dirname, '../../assets/icon.ico'),
     title: 'Sistema Taller Forzani'
@@ -153,10 +155,34 @@ ipcMain.handle('db-add-vehicle', (event, vehicle) => {
   return database.addVehicle(vehicle);
 });
 
+ipcMain.handle('db-update-vehicle', (event, vehicle) => {
+  return database.updateVehicle(vehicle.id, vehicle);
+});
+
+ipcMain.handle('db-delete-vehicle', (event, id) => {
+  return database.deleteVehicle(id);
+});
+
 ipcMain.handle('db-add-part', (event, part) => {
   return database.addPart(part);
 });
 
 ipcMain.handle('db-add-maintenance', (event, maintenance) => {
   return database.addMaintenance(maintenance);
+});
+
+ipcMain.handle('db-update-maintenance', (event, id, maintenance) => {
+  return database.updateMaintenance(id, maintenance);
+});
+
+ipcMain.handle('db-delete-maintenance', (event, id) => {
+  return database.deleteMaintenance(id);
+});
+
+ipcMain.handle('db-update-part', (event, id, part) => {
+  return database.updatePart(id, part);
+});
+
+ipcMain.handle('db-delete-part', (event, id) => {
+  return database.deletePart(id);
 });

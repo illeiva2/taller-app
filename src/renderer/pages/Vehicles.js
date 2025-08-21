@@ -1,164 +1,292 @@
 const React = require('react');
+const { ipcRenderer } = require('electron');
 
 const Vehicles = () => {
-    // Datos de ejemplo
-    const vehicles = [
-        { 
-            id: 1, 
-            name: 'Tractor JD 5075E', 
-            type: 'Tractor', 
-            brand: 'John Deere', 
-            model: '5075E', 
-            year: 2020, 
-            plate: 'ABC123', 
-            status: 'Activo',
-            lastMaintenance: '2024-08-15',
-            nextMaintenance: '2024-09-15'
-        },
-        { 
-            id: 2, 
-            name: 'Cosechadora New Holland', 
-            type: 'Cosechadora', 
-            brand: 'New Holland', 
-            model: 'CR 10.90', 
-            year: 2019, 
-            plate: 'XYZ789', 
-            status: 'Mantenimiento',
-            lastMaintenance: '2024-08-10',
-            nextMaintenance: '2024-08-25'
-        },
-        { 
-            id: 3, 
-            name: 'Camión Iveco Daily', 
-            type: 'Camión', 
-            brand: 'Iveco', 
-            model: 'Daily 35S15', 
-            year: 2021, 
-            plate: 'DEF456', 
-            status: 'Activo',
-            lastMaintenance: '2024-08-05',
-            nextMaintenance: '2024-09-05'
-        },
-        { 
-            id: 4, 
-            name: 'Camioneta Ford Ranger', 
-            type: 'Camioneta', 
-            brand: 'Ford', 
-            model: 'Ranger XLT', 
-            year: 2022, 
-            plate: 'GHI789', 
-            status: 'Activo',
-            lastMaintenance: '2024-08-12',
-            nextMaintenance: '2024-09-12'
+    const [vehicles, setVehicles] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
+    const [showForm, setShowForm] = React.useState(false);
+    const [editingVehicle, setEditingVehicle] = React.useState(null);
+    const [formData, setFormData] = React.useState({
+        name: '',
+        type: '',
+        brand: '',
+        model: '',
+        year: new Date().getFullYear(),
+        plate: '',
+        status: 'Activo'
+    });
+
+    const vehicleTypes = ['Tractor', 'Cosechadora', 'Camión', 'Camioneta', 'Implemento', 'Otro'];
+    const vehicleStatuses = ['Activo', 'Mantenimiento', 'Fuera de Servicio', 'Vendido'];
+
+    React.useEffect(() => {
+        loadVehicles();
+    }, []);
+
+    const loadVehicles = async () => {
+        try {
+            const data = await ipcRenderer.invoke('db-get-vehicles');
+            setVehicles(data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error cargando vehículos:', error);
+            setLoading(false);
         }
-    ];
-    
-    return React.createElement('div', { className: 'vehicles-page fade-in' },
-        // Header de la página
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            if (editingVehicle) {
+                await ipcRenderer.invoke('db-update-vehicle', editingVehicle.id, formData);
+            } else {
+                await ipcRenderer.invoke('db-add-vehicle', formData);
+            }
+            
+            setShowForm(false);
+            setEditingVehicle(null);
+            resetForm();
+            loadVehicles();
+        } catch (error) {
+            console.error('Error guardando vehículo:', error);
+            alert('Error al guardar el vehículo');
+        }
+    };
+
+    const handleEdit = (vehicle) => {
+        setEditingVehicle(vehicle);
+        setFormData({
+            name: vehicle.name,
+            type: vehicle.type,
+            brand: vehicle.brand,
+            model: vehicle.model,
+            year: vehicle.year,
+            plate: vehicle.plate,
+            status: vehicle.status
+        });
+        setShowForm(true);
+    };
+
+    const handleDelete = async (id) => {
+        if (confirm('¿Estás seguro de que quieres eliminar este vehículo?')) {
+            try {
+                await ipcRenderer.invoke('db-delete-vehicle', id);
+                loadVehicles();
+            } catch (error) {
+                console.error('Error eliminando vehículo:', error);
+                alert('Error al eliminar el vehículo');
+            }
+        }
+    };
+
+    const resetForm = () => {
+        setFormData({
+            name: '',
+            type: '',
+            brand: '',
+            model: '',
+            year: new Date().getFullYear(),
+            plate: '',
+            status: 'Activo'
+        });
+    };
+
+    const openNewForm = () => {
+        setEditingVehicle(null);
+        resetForm();
+        setShowForm(true);
+    };
+
+    const closeForm = () => {
+        setShowForm(false);
+        setEditingVehicle(null);
+        resetForm();
+    };
+
+    if (loading) {
+        return React.createElement('div', { className: 'vehicles-loading' },
+            React.createElement('div', { className: 'spinner' }),
+            React.createElement('p', null, 'Cargando vehículos...')
+        );
+    }
+
+    return React.createElement('div', { className: 'vehicles-page' },
+        // Header
         React.createElement('div', { className: 'page-header' },
-            React.createElement('h1', null, 'Gestión de Vehículos'),
-            React.createElement('p', { className: 'page-subtitle' }, 'Administra la flota de vehículos del taller')
+            React.createElement('h1', { className: 'page-title' }, 'Gestión de Vehículos'),
+            React.createElement('button', {
+                className: 'btn btn-primary',
+                onClick: openNewForm
+            }, '🚗 Nuevo Vehículo')
         ),
-        
-        // Barra de acciones
-        React.createElement('div', { className: 'card' },
-            React.createElement('div', { className: 'actions-bar' },
-                React.createElement('button', { className: 'btn btn-primary' }, '➕ Nuevo Vehículo'),
-                React.createElement('button', { className: 'btn btn-secondary' }, '🔍 Buscar'),
-                React.createElement('button', { className: 'btn btn-success' }, '📊 Exportar'),
-                React.createElement('div', { className: 'search-box' },
-                    React.createElement('input', { 
-                        type: 'text', 
-                        className: 'form-input', 
-                        placeholder: 'Buscar vehículo...' 
-                    })
-                )
-            )
-        ),
-        
-        // Tabla de vehículos
-        React.createElement('div', { className: 'card' },
-            React.createElement('div', { className: 'card-header' },
-                React.createElement('h2', { className: 'card-title' }, 'Lista de Vehículos'),
-                React.createElement('span', { className: 'vehicle-count' }, `${vehicles.length} vehículos`)
-            ),
-            React.createElement('div', { className: 'table-container' },
-                React.createElement('table', { className: 'table' },
-                    React.createElement('thead', null,
-                        React.createElement('tr', null, [
-                            React.createElement('th', { key: 'name' }, 'Vehículo'),
-                            React.createElement('th', { key: 'type' }, 'Tipo'),
-                            React.createElement('th', { key: 'brand' }, 'Marca'),
-                            React.createElement('th', { key: 'plate' }, 'Patente'),
-                            React.createElement('th', { key: 'status' }, 'Estado'),
-                            React.createElement('th', { key: 'lastMaintenance' }, 'Último Mant.'),
-                            React.createElement('th', { key: 'nextMaintenance' }, 'Próximo Mant.'),
-                            React.createElement('th', { key: 'actions' }, 'Acciones')
-                        ])
-                    ),
-                    React.createElement('tbody', null,
-                        vehicles.map(vehicle => 
-                            React.createElement('tr', { key: vehicle.id }, [
-                                React.createElement('td', { key: 'name' },
-                                    React.createElement('div', { className: 'vehicle-info' },
-                                        React.createElement('strong', null, vehicle.name),
-                                        React.createElement('small', null, `${vehicle.year}`)
-                                    )
-                                ),
-                                React.createElement('td', { key: 'type' },
-                                    React.createElement('span', { className: 'vehicle-type' }, vehicle.type)
-                                ),
-                                React.createElement('td', { key: 'brand' }, vehicle.brand),
-                                React.createElement('td', { key: 'plate' },
-                                    React.createElement('span', { className: 'plate-number' }, vehicle.plate)
-                                ),
-                                React.createElement('td', { key: 'status' },
-                                    React.createElement('span', { 
-                                        className: `status-badge ${vehicle.status.toLowerCase()}` 
-                                    }, vehicle.status)
-                                ),
-                                React.createElement('td', { key: 'lastMaintenance' }, vehicle.lastMaintenance),
-                                React.createElement('td', { key: 'nextMaintenance' }, vehicle.nextMaintenance),
-                                React.createElement('td', { key: 'actions' },
-                                    React.createElement('div', { className: 'action-buttons' }, [
-                                        React.createElement('button', { 
-                                            key: 'edit',
-                                            className: 'btn btn-sm btn-secondary',
-                                            title: 'Editar'
-                                        }, '✏️'),
-                                        React.createElement('button', { 
-                                            key: 'maintenance',
-                                            className: 'btn btn-sm btn-success',
-                                            title: 'Mantenimiento'
-                                        }, '🔧'),
-                                        React.createElement('button', { 
-                                            key: 'delete',
-                                            className: 'btn btn-sm btn-danger',
-                                            title: 'Eliminar'
-                                        }, '🗑️')
-                                    ])
+
+        // Formulario
+        showForm && React.createElement('div', { className: 'form-overlay' },
+            React.createElement('div', { className: 'form-container' },
+                React.createElement('div', { className: 'form-header' },
+                    React.createElement('h2', null, editingVehicle ? 'Editar Vehículo' : 'Nuevo Vehículo'),
+                    React.createElement('button', {
+                        className: 'btn-close',
+                        onClick: closeForm
+                    }, '×')
+                ),
+                React.createElement('form', { onSubmit: handleSubmit, className: 'vehicle-form' },
+                    React.createElement('div', { className: 'form-row' },
+                        React.createElement('div', { className: 'form-group' },
+                            React.createElement('label', null, 'Nombre *'),
+                            React.createElement('input', {
+                                type: 'text',
+                                name: 'name',
+                                value: formData.name,
+                                onChange: handleInputChange,
+                                required: true,
+                                placeholder: 'Ej: Tractor JD 5075E'
+                            })
+                        ),
+                        React.createElement('div', { className: 'form-group' },
+                            React.createElement('label', null, 'Tipo *'),
+                            React.createElement('select', {
+                                name: 'type',
+                                value: formData.type,
+                                onChange: handleInputChange,
+                                required: true
+                            },
+                                React.createElement('option', { value: '' }, 'Seleccionar tipo'),
+                                vehicleTypes.map(type => 
+                                    React.createElement('option', { key: type, value: type }, type)
                                 )
-                            ])
+                            )
                         )
+                    ),
+                    React.createElement('div', { className: 'form-row' },
+                        React.createElement('div', { className: 'form-group' },
+                            React.createElement('label', null, 'Marca *'),
+                            React.createElement('input', {
+                                type: 'text',
+                                name: 'brand',
+                                value: formData.brand,
+                                onChange: handleInputChange,
+                                required: true,
+                                placeholder: 'Ej: John Deere'
+                            })
+                        ),
+                        React.createElement('div', { className: 'form-group' },
+                            React.createElement('label', null, 'Modelo *'),
+                            React.createElement('input', {
+                                type: 'text',
+                                name: 'model',
+                                value: formData.model,
+                                onChange: handleInputChange,
+                                required: true,
+                                placeholder: 'Ej: 5075E'
+                            })
+                        )
+                    ),
+                    React.createElement('div', { className: 'form-row' },
+                        React.createElement('div', { className: 'form-group' },
+                            React.createElement('label', null, 'Año *'),
+                            React.createElement('input', {
+                                type: 'number',
+                                name: 'year',
+                                value: formData.year,
+                                onChange: handleInputChange,
+                                required: true,
+                                min: 1900,
+                                max: new Date().getFullYear() + 1
+                            })
+                        ),
+                        React.createElement('div', { className: 'form-group' },
+                            React.createElement('label', null, 'Patente'),
+                            React.createElement('input', {
+                                type: 'text',
+                                name: 'plate',
+                                value: formData.plate,
+                                onChange: handleInputChange,
+                                placeholder: 'Ej: ABC123'
+                            })
+                        )
+                    ),
+                    React.createElement('div', { className: 'form-group' },
+                        React.createElement('label', null, 'Estado'),
+                        React.createElement('select', {
+                            name: 'status',
+                            value: formData.status,
+                            onChange: handleInputChange
+                        },
+                            vehicleStatuses.map(status => 
+                                React.createElement('option', { key: status, value: status }, status)
+                            )
+                        )
+                    ),
+                    React.createElement('div', { className: 'form-actions' },
+                        React.createElement('button', {
+                            type: 'button',
+                            className: 'btn btn-secondary',
+                            onClick: closeForm
+                        }, 'Cancelar'),
+                        React.createElement('button', {
+                            type: 'submit',
+                            className: 'btn btn-primary'
+                        }, editingVehicle ? 'Actualizar' : 'Crear')
                     )
                 )
             )
         ),
-        
-        // Estadísticas de vehículos
-        React.createElement('div', { className: 'grid grid-3' },
-            React.createElement('div', { className: 'stat-card' },
-                React.createElement('div', { className: 'stat-number' }, vehicles.filter(v => v.status === 'Activo').length),
-                React.createElement('div', { className: 'stat-label' }, 'Vehículos Activos')
-            ),
-            React.createElement('div', { className: 'stat-card' },
-                React.createElement('div', { className: 'stat-number' }, vehicles.filter(v => v.status === 'Mantenimiento').length),
-                React.createElement('div', { className: 'stat-label' }, 'En Mantenimiento')
-            ),
-            React.createElement('div', { className: 'stat-card' },
-                React.createElement('div', { className: 'stat-number' }, vehicles.filter(v => v.status === 'Inactivo').length),
-                React.createElement('div', { className: 'stat-label' }, 'Inactivos')
-            )
+
+        // Lista de vehículos
+        React.createElement('div', { className: 'vehicles-list' },
+            vehicles.length > 0 ? 
+                React.createElement('div', { className: 'vehicles-grid' },
+                    vehicles.map(vehicle => 
+                        React.createElement('div', { 
+                            key: vehicle.id, 
+                            className: `vehicle-card ${vehicle.status.toLowerCase().replace(' ', '-')}` 
+                        },
+                            React.createElement('div', { className: 'vehicle-header' },
+                                React.createElement('h3', { className: 'vehicle-name' }, vehicle.name),
+                                React.createElement('span', { 
+                                    className: `status-badge ${vehicle.status.toLowerCase().replace(' ', '-')}` 
+                                }, vehicle.status)
+                            ),
+                            React.createElement('div', { className: 'vehicle-details' },
+                                React.createElement('p', { className: 'vehicle-info' }, 
+                                    `${vehicle.brand} ${vehicle.model} (${vehicle.year})`
+                                ),
+                                vehicle.plate && React.createElement('p', { className: 'vehicle-plate' }, 
+                                    `Patente: ${vehicle.plate}`
+                                ),
+                                React.createElement('p', { className: 'vehicle-type' }, 
+                                    `Tipo: ${vehicle.type}`
+                                )
+                            ),
+                            React.createElement('div', { className: 'vehicle-actions' },
+                                React.createElement('button', {
+                                    className: 'btn btn-secondary btn-sm',
+                                    onClick: () => handleEdit(vehicle)
+                                }, '✏️ Editar'),
+                                React.createElement('button', {
+                                    className: 'btn btn-danger btn-sm',
+                                    onClick: () => handleDelete(vehicle.id)
+                                }, '🗑️ Eliminar')
+                            )
+                        )
+                    )
+                ) :
+                React.createElement('div', { className: 'no-vehicles' },
+                    React.createElement('p', null, 'No hay vehículos registrados'),
+                    React.createElement('button', {
+                        className: 'btn btn-primary',
+                        onClick: openNewForm
+                    }, 'Agregar primer vehículo')
+                )
         )
     );
 };
